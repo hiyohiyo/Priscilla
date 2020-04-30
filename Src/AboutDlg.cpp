@@ -39,15 +39,8 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogFx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_CRYSTAL_DEW_WORLD, m_CtrlCrystalDewWorld);
-
-	DDX_Control(pDX, IDC_PROJECT_SITE_1, m_CtrlProjectSite1);
-	DDX_Control(pDX, IDC_PROJECT_SITE_2, m_CtrlProjectSite2);
-	DDX_Control(pDX, IDC_PROJECT_SITE_3, m_CtrlProjectSite3);
-	DDX_Control(pDX, IDC_PROJECT_SITE_4, m_CtrlProjectSite4);
-	DDX_Control(pDX, IDC_PROJECT_SITE_5, m_CtrlProjectSite5);
 	DDX_Control(pDX, IDC_VERSION, m_CtrlVersion);
 	DDX_Control(pDX, IDC_LICENSE, m_CtrlLicense);
-	
 	DDX_Control(pDX, IDC_RELEASE, m_CtrlRelease);
 	DDX_Control(pDX, IDC_COPYRIGHT, m_CtrlCopyright);
 	DDX_Control(pDX, IDC_EDITION, m_CtrlEdition);

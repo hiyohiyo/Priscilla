@@ -34,11 +34,6 @@ protected:
 	afx_msg void OnLicense();
 
 	CButtonFx m_CtrlCrystalDewWorld;
-	CButtonFx m_CtrlProjectSite1;
-	CButtonFx m_CtrlProjectSite2;
-	CButtonFx m_CtrlProjectSite3;
-	CButtonFx m_CtrlProjectSite4;
-	CButtonFx m_CtrlProjectSite5;
 	CButtonFx m_CtrlVersion;
 	CButtonFx m_CtrlLicense;
 	CStaticFx m_CtrlEdition;

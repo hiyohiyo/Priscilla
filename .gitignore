@@ -1,2 +1,9 @@
 Exe/SignAppliAll.bat
 *.ini
+Exe/Priscilla64.ipdb
+Exe/Priscilla64.iobj
+Exe/Priscilla32.ipdb
+Exe/Priscilla32.iobj
+Exe/Priscilla.pdb
+Exe/Priscilla.ilk
+Exe/Priscilla.exe
