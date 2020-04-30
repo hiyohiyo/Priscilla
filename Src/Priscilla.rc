@@ -1,0 +1,309 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 日本語 (日本) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)\r\n"
+    "LANGUAGE 17, 1\r\n"
+    "#pragma code_page(932)\r\n"
+    "#include ""res\\Priscilla.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAIN DIALOGEX 0, 0, 267, 344
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Priscilla"
+MENU IDR_MENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "Button",IDC_BUTTON1,7,25,53,43
+    LTEXT           "スタティック",IDC_STATIC1,68,25,191,43
+    LTEXT           "スタティック",IDC_METER1,7,7,132,14
+    EDITTEXT        IDC_EDIT1,7,83,252,24,ES_AUTOHSCROLL
+    COMBOBOX        IDC_COMBO1,144,7,48,30,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_SORT | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,124,252,214
+END
+
+IDD_ABOUT DIALOGEX 0, 0, 477, 362
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Priscilla"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "",IDC_CRYSTAL_DEW_WORLD,26,17,156,107
+    PUSHBUTTON      "",IDC_VERSION,240,18,193,8
+    LTEXT           "",IDC_EDITION,241,38,33,8
+    LTEXT           "",IDC_RELEASE,239,62,33,8
+    LTEXT           "",IDC_COPYRIGHT,241,84,33,8
+    PUSHBUTTON      "",IDC_LICENSE,239,110,33,8
+    PUSHBUTTON      "",IDC_PROJECT_SITE_1,77,144,228,21
+    PUSHBUTTON      "",IDC_PROJECT_SITE_2,77,194,232,22
+    PUSHBUTTON      "",IDC_PROJECT_SITE_3,196,229,270,31
+    PUSHBUTTON      "",IDC_PROJECT_SITE_4,196,267,270,31
+    PUSHBUTTON      "",IDC_PROJECT_SITE_5,196,267,270,31
+END
+
+IDD_FONT DIALOGEX 0, 0, 180, 89
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Font Setting"
+FONT 12, "MS Shell Dlg", 400, 0, 0x80
+BEGIN
+    LTEXT           "Font Face",IDC_FONT_FACE,1,1,1,1
+    LTEXT           "Font Scale",IDC_FONT_SCALE,1,1,1,1
+    COMBOBOX        IDC_FONT_FACE_COMBO,7,6,166,20,CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FONT_SCALE_COMBO,7,28,166,148,CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Default",IDC_SET_DEFAULT,26,17,156,107,BS_CENTER
+    PUSHBUTTON      "OK",ID_OK,48,68,83,14,BS_CENTER
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,2020
+ PRODUCTVERSION 1,0,0,2020
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041103a4"
+        BEGIN
+            VALUE "Comments", "https://crystalmark.info/, The MIT License"
+            VALUE "CompanyName", "Crystal Dew World"
+            VALUE "FileVersion", "1.0.0.2020"
+            VALUE "ProductName", "Project Priscilla"
+            VALUE "FileDescription", "Project Priscilla"
+            VALUE "OriginalFilename", "Priscilla.exe"
+            VALUE "InternalName", "Priscilla.exe"
+            VALUE "LegalCopyright", "(C) 2020 hiyohiyo"
+            VALUE "ProductVersion", "1.0.0.2020"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x411, 932
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_MAIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 259
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 338
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 161
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 95
+    END
+
+    IDD_FONT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 173
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 82
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "Exit",                        ID_FILE_EXIT
+    END
+    POPUP "&Theme"
+    BEGIN
+        POPUP "Zoom"
+        BEGIN
+            MENUITEM "100%",                        ID_ZOOM_100
+            MENUITEM "125%",                        ID_ZOOM_125
+            MENUITEM "150%",                        ID_ZOOM_150
+            MENUITEM "200%",                        ID_ZOOM_200
+            MENUITEM "250%",                        ID_ZOOM_250
+            MENUITEM "300%",                        ID_ZOOM_300
+            MENUITEM "Auto",                        ID_ZOOM_AUTO
+        END
+        MENUITEM "Font Setting",                ID_FONT_SETTING
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "Help",                        ID_HELP
+        MENUITEM "About Project Priscilla",     ID_HELP_ABOUT
+        MENUITEM SEPARATOR
+        MENUITEM "Crystal Dew World [Web]",     ID_HELP_CRYSTALDEWWORLD
+    END
+    POPUP "&Language"
+    BEGIN
+        POPUP "A-N"
+        BEGIN
+            MENUITEM "DUMMY",                       ID_LANGUAGE_A
+        END
+        POPUP "O-Z"
+        BEGIN
+            MENUITEM "DUMMY",                       ID_LANGUAGE_O
+        END
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\Priscilla.ico"
+
+IDI_TRAY_ICON           ICON                    "res\\Priscilla16.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATOR ACCELERATORS
+BEGIN
+    VK_F4,          ID_FILE_EXIT,           VIRTKEY, ALT, NOINVERT
+    VK_F1,          ID_HELP,                VIRTKEY, NOINVERT
+    "F",            ID_FONT_SETTING,        VIRTKEY, CONTROL, NOINVERT
+    VK_ESCAPE,      IDOK,                   VIRTKEY, NOINVERT
+    VK_F5,          IDOK,                   VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_MAIN AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // 日本語 (日本) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+LANGUAGE 17, 1
+#pragma code_page(932)
+#include "res\Priscilla.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
