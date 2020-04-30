@@ -50,7 +50,6 @@ protected:
 
 	// Common
 	BOOL m_bStartup;
-	BOOL m_bInitializing;
 	BOOL m_bWindowMinimizeOnce;
 	BOOL m_bResident;
 	BOOL m_bResidentMinimize;

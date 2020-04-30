@@ -54,8 +54,8 @@
 // Global Sttings
 //------------------------------------------------
 
-#define PRODUCT_NAME				L"Project Priscilla"
-#define PRODUCT_VERSION				L""
+#define PRODUCT_NAME				L"Priscilla"
+#define PRODUCT_VERSION				L"Eternal Beta"
 #define PRODUCT_SHORT_NAME			L"Priscilla"
 #ifdef _M_ARM
 #define PRODUCT_EDITION				L"ARM32"

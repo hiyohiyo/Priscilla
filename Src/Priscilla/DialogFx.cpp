@@ -30,6 +30,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	      :CDialog(dlgResouce, pParent)
 {
 	// Dialog
+	m_bInitializing = TRUE;
 	m_bShowWindow = FALSE;
 	m_bModelessDlg = FALSE;
 	m_bHighContrast = FALSE;
@@ -109,6 +110,8 @@ BOOL CDialogFx::OnInitDialog()
 	}
 
 	m_hAccelerator = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
+
+	m_bInitializing = FALSE;
 
 	return TRUE;
 }
@@ -464,6 +467,8 @@ afx_msg LRESULT CDialogFx::OnUpdateDialogSize(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
+	if (m_bInitializing) { return 0; }
+
 	static DWORD preTime = 0;
 	DWORD currentTime = GetTickCount();
 	if (currentTime - preTime < 1000)
@@ -496,6 +501,8 @@ afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CDialogFx::OnDisplayChange(WPARAM wParam, LPARAM lParam)
 {
+	if (m_bInitializing) { return 0; }
+
 	SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);
 
 	return 0;
@@ -503,6 +510,8 @@ afx_msg LRESULT CDialogFx::OnDisplayChange(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CDialogFx::OnSysColorChange(WPARAM wParam, LPARAM lParam)
 {
+	if (m_bInitializing) { return 0; }
+
 	m_bHighContrast = IsHighContrast();
 
 	SetTimer(TimerUpdateDialogSize, TIMER_UPDATE_DIALOG, NULL);

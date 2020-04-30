@@ -55,6 +55,7 @@ protected:
 
 protected:
 	// Dialog
+	BOOL m_bInitializing;
 	BOOL m_bShowWindow;
 	BOOL m_bModelessDlg;
 	BOOL m_bHighContrast;

@@ -16,7 +16,6 @@ CMainDialog::CMainDialog(UINT dlgResouce, CWnd* pParent)
 {
 	// Common
 	m_bStartup = FALSE;
-	m_bInitializing = TRUE;
 	m_bWindowMinimizeOnce = TRUE;
 	m_bResident = FALSE;
 	m_bResidentMinimize = FALSE;
