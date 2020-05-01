@@ -32,7 +32,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual void UpdateDialogSize();
 
-	void SetDefaultFont();
+	void SetDefaultFont(CString fontFace);
 
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnSetDefault();

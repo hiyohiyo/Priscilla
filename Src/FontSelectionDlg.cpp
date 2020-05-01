@@ -59,7 +59,7 @@ BOOL CFontSelectionDlg::OnInitDialog()
 
 	SetWindowText(i18n(L"WindowTitle", L"FONT_SETTING"));
 
-	SetDefaultFont();
+	SetDefaultFont(m_FontFace);
 
 	CString cstr;
 	for (int i = 50; i <= 150; i += 10)
@@ -137,7 +137,6 @@ int CFontSelectionDlg::GetFontScale()
 	return m_FontScale;
 }
 
-
 void CFontSelectionDlg::OnOk()
 {
 	CString cstr;
@@ -164,11 +163,11 @@ int CALLBACK EnumFontFamExProc(ENUMLOGFONTEX *lpelfe, NEWTEXTMETRICEX *lpntme, i
 
 void CFontSelectionDlg::OnSetDefault()
 {
-	SetDefaultFont();
+	SetDefaultFont(L"");
 	m_CtrlFontScale.SetCurSel(5);
 }
 
-void CFontSelectionDlg::SetDefaultFont()
+void CFontSelectionDlg::SetDefaultFont(CString fontFace)
 {
 	m_CtrlFontFace.ResetContent();
 
@@ -179,22 +178,29 @@ void CFontSelectionDlg::SetDefaultFont()
 
 	::EnumFontFamiliesExW(dc.m_hDC, &logfont, (FONTENUMPROC)EnumFontFamExProc, (LPARAM)&m_CtrlFontFace, 0);
 
-	int no = m_CtrlFontFace.FindStringExact(0, DEFAULT_FONT_FACE_1);
+	int no = m_CtrlFontFace.FindStringExact(0, fontFace);
 	if (no >= 0)
 	{
 		m_CtrlFontFace.SetCurSel(no);
 	}
 	else
 	{
-		no = m_CtrlFontFace.FindStringExact(0, DEFAULT_FONT_FACE_2);
+		no = m_CtrlFontFace.FindStringExact(0, DEFAULT_FONT_FACE_1);
 		if (no >= 0)
 		{
 			m_CtrlFontFace.SetCurSel(no);
 		}
 		else
 		{
-			m_CtrlFontFace.SetCurSel(0);
+			no = m_CtrlFontFace.FindStringExact(0, DEFAULT_FONT_FACE_2);
+			if (no >= 0)
+			{
+				m_CtrlFontFace.SetCurSel(no);
+			}
+			else
+			{
+				m_CtrlFontFace.SetCurSel(0);
+			}
 		}
 	}
-
 }

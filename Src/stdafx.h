@@ -67,7 +67,7 @@
 #define PRODUCT_EDITION				L""
 #endif
 
-#define PRODUCT_RELEASE				L"2020/04/30"
+#define PRODUCT_RELEASE				L"2020/05/01"
 #define PRODUCT_COPY_YEAR			L"2020"
 #define PRODUCT_COPYRIGHT			L"© 2020 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"

@@ -143,6 +143,9 @@ BOOL CPriscillaDlg::OnInitDialog()
 	return TRUE;
 }
 
+typedef int(WINAPI* FuncGetSystemMetricsForDpi) (int nIndex, UINT dpi);
+typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
+
 void CPriscillaDlg::UpdateDialogSize()
 {
 	ShowWindow(SW_HIDE);
@@ -159,27 +162,43 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BgDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage | m_bHighContrast);
 	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BgDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast, m_ComboBg, m_ComboBgSelected, m_Glass, m_GlassAlpha);
 	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BgDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast);
-	m_List1.InitControl(8, 148, 464, 144, 464, 144, m_ZoomRatio, &m_BgDC, OwnerDrawGlass | m_bHighContrast);
+	m_List1.InitControl(8, 148, 464, 72, 464, 72, m_ZoomRatio, &m_BgDC, OwnerDrawGlass | m_bHighContrast);
 
 	m_Button1.SetHandCursor();
 	m_Combo1.SetCurSel(0);
 	m_Combo1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+
+	static FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetSystemMetricsForDpi");
+	static FuncGetDpiForWindow pGetDpiForWindow = (FuncGetDpiForWindow)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetDpiForWindow");
+
+	int width = 0;
+	if (pGetSystemMetricsForDpi != NULL)
+	{
+		width = (int)((460 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))));
+	}
+	else
+	{
+		width = (int)(460 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL));
+	}
 
 	m_List1.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_List1.DeleteAllItems();
 	while (m_List1.DeleteColumn(0)) {}
 	m_List1.InsertColumn(0, L"Column0", LVCFMT_LEFT, (int)(100 * m_ZoomRatio), 0);
 	m_List1.InsertColumn(1, L"Column1", LVCFMT_LEFT, (int)(100 * m_ZoomRatio), 0);
-	m_List1.InsertColumn(2, L"Column2", LVCFMT_LEFT, (int)(260 * m_ZoomRatio), 0);
+	m_List1.InsertColumn(2, L"Column2", LVCFMT_LEFT, (int)(width - 200 * m_ZoomRatio), 0);
 	m_List1.InsertItem(0, L"Item0-0");
 	m_List1.InsertItem(1, L"Item1-0");
 	m_List1.InsertItem(2, L"Item2-0");
+	m_List1.InsertItem(3, L"Item3-0");
 	m_List1.SetItemText(0, 1, L"Item0-1");
 	m_List1.SetItemText(0, 2, L"Item0-2");
 	m_List1.SetItemText(1, 1, L"Item1-1");
 	m_List1.SetItemText(1, 2, L"Item1-2");
 	m_List1.SetItemText(2, 1, L"Item2-1");
 	m_List1.SetItemText(2, 2, L"Item2-2");
+	m_List1.SetItemText(3, 1, L"Item3-1");
+	m_List1.SetItemText(3, 2, L"Item3-2");
 
 	m_List1.EnableHeaderOwnerDraw(TRUE);
 
