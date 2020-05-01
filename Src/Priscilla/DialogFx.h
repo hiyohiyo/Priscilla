@@ -56,6 +56,7 @@ protected:
 protected:
 	// Dialog
 	BOOL m_bInitializing;
+	BOOL m_bDpiChanging;
 	BOOL m_bShowWindow;
 	BOOL m_bModelessDlg;
 	BOOL m_bHighContrast;
@@ -69,6 +70,11 @@ protected:
 	CString m_FontFace;
 	int m_FontScale;
 	double m_FontRatio;
+
+	int m_MaxSizeX;
+	int m_MinSizeX;
+	int m_MaxSizeY;
+	int m_MinSizeY;
 
 	// Zoom
 	int m_Dpi;
