@@ -181,11 +181,11 @@ void CPriscillaDlg::UpdateDialogSize()
 	int width = 0;
 	if (pGetSystemMetricsForDpi != NULL)
 	{
-		width = (int)((460 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))));
+		width = (int)((464 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))) - 4);
 	}
 	else
 	{
-		width = (int)(460 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL));
+		width = (int)(464 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL) - 4);
 	}
 
 	m_List1.SetGlassColor(m_Glass, m_GlassAlpha);
