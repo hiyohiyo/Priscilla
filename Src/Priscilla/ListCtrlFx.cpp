@@ -107,7 +107,8 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		delete[] bitmapBits;
 
 		SetupControlImage(m_BgBitmap, m_CtrlBitmap);
-		if(m_bNT6orLater){
+		if(m_bNT6orLater)
+		{
 			SetBkImage((HBITMAP)m_CtrlBitmap);
 			m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_TextColor1, m_LineColor1, m_RenderMode);
 		}
@@ -115,7 +116,8 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 	else
 	{
 		m_bHighContrast = FALSE;
-		if(m_bNT6orLater){
+		if(m_bNT6orLater)
+		{
 			SetBkImage(L"");
 			m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_TextColor1, m_LineColor1, m_RenderMode);
 		}
@@ -257,11 +259,11 @@ void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fon
 	logFont.lfQuality = 6;
 	if(face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, _T("%s"), face.GetString());
+		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, _T(""));
+		wsprintf(logFont.lfFaceName, L"");
 	}
 
 	m_Font.DeleteObject();

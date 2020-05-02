@@ -41,9 +41,7 @@ void CHeaderCtrlFx::InitControl(int x, int y, double zoomRatio, CDC* bgDC, CBitm
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
 	m_ZoomRatio = zoomRatio;
-	m_FontRatio = 1.0;
 	m_BgDC = bgDC;
-	m_FontSize = 12;
 	m_TextColor = textColor;
 	m_LineColor = lineColor;
 	m_CtrlBitmap = ctrlBitmap;
@@ -139,7 +137,7 @@ LRESULT CHeaderCtrlFx::OnLayout(WPARAM wParam, LPARAM lParam)
 		RECT* prc = hdl.prc;
 		WINDOWPOS* pwpos = hdl.pwpos;
 
-		int nHeight = (int)(pwpos->cy * (m_FontSize * m_ZoomRatio * m_FontRatio) / 12.0);
+		int nHeight = (int)(pwpos->cy * (m_ZoomRatio * m_FontRatio));
 
 		pwpos->cy = nHeight;
 		prc->top = nHeight;
@@ -160,11 +158,11 @@ void CHeaderCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double f
 	logFont.lfQuality = 6;
 	if (face.GetLength() < 32)
 	{
-		wsprintf(logFont.lfFaceName, _T("%s"), face.GetString());
+		wsprintf(logFont.lfFaceName, L"%s", face.GetString());
 	}
 	else
 	{
-		wsprintf(logFont.lfFaceName, _T(""));
+		wsprintf(logFont.lfFaceName, L"");
 	}
 
 	m_Font.DeleteObject();

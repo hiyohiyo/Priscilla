@@ -150,6 +150,17 @@ void CPriscillaDlg::UpdateDialogSize()
 {
 	ShowWindow(SW_HIDE);
 
+	switch (GetPrivateProfileInt(L"Setting", L"ZoomType", 0, m_Ini))
+	{
+	case 100:  CheckRadioZoomType(ID_ZOOM_100, 100); break;
+	case 125:  CheckRadioZoomType(ID_ZOOM_125, 125); break;
+	case 150:  CheckRadioZoomType(ID_ZOOM_150, 150); break;
+	case 200:  CheckRadioZoomType(ID_ZOOM_200, 200); break;
+	case 250:  CheckRadioZoomType(ID_ZOOM_250, 250); break;
+	case 300:  CheckRadioZoomType(ID_ZOOM_300, 300); break;
+	default:   CheckRadioZoomType(ID_ZOOM_AUTO, 0); break;
+	}
+
 	SetClientSize((int)(m_SizeX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio), 1);
 	UpdateBackground(TRUE);
 	SetControlFont();
@@ -168,8 +179,8 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_Combo1.SetCurSel(0);
 	m_Combo1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
-	static FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetSystemMetricsForDpi");
-	static FuncGetDpiForWindow pGetDpiForWindow = (FuncGetDpiForWindow)GetProcAddress(GetModuleHandle(_T("User32.dll")), "GetDpiForWindow");
+	static FuncGetSystemMetricsForDpi pGetSystemMetricsForDpi = (FuncGetSystemMetricsForDpi)GetProcAddress(GetModuleHandle(L"User32.dll"), "GetSystemMetricsForDpi");
+	static FuncGetDpiForWindow pGetDpiForWindow = (FuncGetDpiForWindow)GetProcAddress(GetModuleHandle(L"User32.dll"), "GetDpiForWindow");
 
 	int width = 0;
 	if (pGetSystemMetricsForDpi != NULL)

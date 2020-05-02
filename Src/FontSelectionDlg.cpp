@@ -92,8 +92,8 @@ void CFontSelectionDlg::UpdateDialogSize()
 	m_LabelFontScale.InitControl(8, 76, 432, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
 	m_CtrlFontFace.InitControl(20, 36, 440, 360, m_ZoomRatio, &m_BgDC, NULL, 0, ES_LEFT, OwnerDrawTransparent | m_bHighContrast, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
 	m_CtrlFontScale.InitControl(20, 104, 440, 360, m_ZoomRatio, &m_BgDC, NULL, 0, ES_LEFT, OwnerDrawTransparent | m_bHighContrast, RGB(255, 255, 255), RGB(160, 220, 255), RGB(255, 255, 255), 0);
-	m_CtrlSetDefault.InitControl(40, 152, 168, 24, m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
-	m_CtrlOk.InitControl(280, 152, 168, 24, m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlSetDefault.InitControl(40, 156, 168, 32, m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
+	m_CtrlOk.InitControl(280, 156, 168, 32, m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, SystemDraw | m_bHighContrast);
 
 	m_CtrlFontFace.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_CtrlFontScale.SetMargin(0, 4, 0, 0, m_ZoomRatio);
