@@ -109,17 +109,23 @@ BOOL CPriscillaDlg::OnInitDialog()
 	UpdateData(FALSE);
 
 	ChangeZoomType(m_ZoomType);
+	switch (GetPrivateProfileInt(L"Setting", L"ZoomType", 0, m_Ini))
+	{
+	case 100:  CheckRadioZoomType(ID_ZOOM_100, 100); break;
+	case 125:  CheckRadioZoomType(ID_ZOOM_125, 125); break;
+	case 150:  CheckRadioZoomType(ID_ZOOM_150, 150); break;
+	case 200:  CheckRadioZoomType(ID_ZOOM_200, 200); break;
+	case 250:  CheckRadioZoomType(ID_ZOOM_250, 250); break;
+	case 300:  CheckRadioZoomType(ID_ZOOM_300, 300); break;
+	default:   CheckRadioZoomType(ID_ZOOM_AUTO, 0); break;
+	}
 	
 	m_SizeX = SIZE_X;
 	m_SizeY = SIZE_Y;
 
 	SetWindowTitle(L"");
 
-	SetClientSize((int)(m_SizeX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio));
-
 	m_bShowWindow = TRUE;
-
-	CenterWindow();
 
 	//// Init Controls
 	m_Static1.SetWindowTextW(L"Project Priscilla");
@@ -135,6 +141,7 @@ BOOL CPriscillaDlg::OnInitDialog()
 	ListView_SetExtendedListViewStyle(m_List1.m_hWnd, style);
 
 	UpdateDialogSize();
+	CenterWindow();
 
 	m_bInitializing = FALSE;
 
@@ -149,17 +156,6 @@ typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
 void CPriscillaDlg::UpdateDialogSize()
 {
 	ShowWindow(SW_HIDE);
-
-	switch (GetPrivateProfileInt(L"Setting", L"ZoomType", 0, m_Ini))
-	{
-	case 100:  CheckRadioZoomType(ID_ZOOM_100, 100); break;
-	case 125:  CheckRadioZoomType(ID_ZOOM_125, 125); break;
-	case 150:  CheckRadioZoomType(ID_ZOOM_150, 150); break;
-	case 200:  CheckRadioZoomType(ID_ZOOM_200, 200); break;
-	case 250:  CheckRadioZoomType(ID_ZOOM_250, 250); break;
-	case 300:  CheckRadioZoomType(ID_ZOOM_300, 300); break;
-	default:   CheckRadioZoomType(ID_ZOOM_AUTO, 0); break;
-	}
 
 	SetClientSize((int)(m_SizeX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio), 1);
 	UpdateBackground(TRUE);
