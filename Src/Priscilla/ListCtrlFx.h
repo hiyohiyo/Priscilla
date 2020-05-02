@@ -42,12 +42,20 @@ public:
 	COLORREF GetLineColor2();
 
 	BOOL InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bgDC, int renderMode);
-	void SetFontEx(CString face, double zoomRatio, double fontRatio = 1.0);
+	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio = 1.0);
 	void EnableHeaderOwnerDraw(BOOL bOwnerDraw);
 
 protected:
+	virtual void PreSubclassWindow();
+
+	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
+
+	DECLARE_MESSAGE_MAP()
+	afx_msg void OnCustomdraw(NMHDR* pNMHDR, LRESULT* pResult);
+
 	int m_X;
 	int m_Y;
+	BOOL m_bNT6orLater;
 	CSize m_CtrlSize;
 	CRect m_Margin;
 	int m_RenderMode;
@@ -75,12 +83,6 @@ protected:
 	CBitmap m_BgBitmap;
 	CBitmap m_CtrlBitmap;
 	CImage m_CtrlImage;
-
-	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
-
-	virtual void PreSubclassWindow();
-	afx_msg void OnCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);
-	DECLARE_MESSAGE_MAP()
 };
 
 

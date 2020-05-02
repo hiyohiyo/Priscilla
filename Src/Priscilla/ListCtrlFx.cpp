@@ -7,6 +7,7 @@
 
 #include "../stdafx.h"
 #include "ListCtrlFx.h"
+#include "GetOsInfo.h"
 
 IMPLEMENT_DYNAMIC(CListCtrlFx, CListCtrl)
 
@@ -14,6 +15,7 @@ CListCtrlFx::CListCtrlFx()
 {
 	m_X = 0;
 	m_Y = 0;
+	m_bNT6orLater = IsNT6orLater();
 	m_BgDC = NULL;
 	m_bHighContrast = FALSE;
 	m_RenderMode = SystemDraw;
@@ -105,16 +107,18 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 		delete[] bitmapBits;
 
 		SetupControlImage(m_BgBitmap, m_CtrlBitmap);
-
-		SetBkImage((HBITMAP)m_CtrlBitmap);
-
-		m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_TextColor1, m_LineColor1, m_RenderMode);
+		if(m_bNT6orLater){
+			SetBkImage((HBITMAP)m_CtrlBitmap);
+			m_Header.InitControl(x, y, zoomRatio, bgDC, &m_CtrlBitmap, m_TextColor1, m_LineColor1, m_RenderMode);
+		}
 	}
 	else
 	{
 		m_bHighContrast = FALSE;
-		SetBkImage(L"");
-		m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_TextColor1, m_LineColor1, m_RenderMode);
+		if(m_bNT6orLater){
+			SetBkImage(L"");
+			m_Header.InitControl(x, y, zoomRatio, bgDC, NULL, m_TextColor1, m_LineColor1, m_RenderMode);
+		}
 	}
 
 	return TRUE;
@@ -245,11 +249,11 @@ COLORREF CListCtrlFx::GetBkSelected(){return m_BkSelected;}
 COLORREF CListCtrlFx::GetLineColor1(){return m_LineColor1;}
 COLORREF CListCtrlFx::GetLineColor2(){return m_LineColor2;}
 
-void CListCtrlFx::SetFontEx(CString face, double zoomRatio, double fontRatio)
+void CListCtrlFx::SetFontEx(CString face, int size, double zoomRatio, double fontRatio)
 {
 	LOGFONT logFont = {0};
 	logFont.lfCharSet = DEFAULT_CHARSET;
-	logFont.lfHeight = (LONG)(-12 * zoomRatio * fontRatio);
+	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
 	logFont.lfQuality = 6;
 	if(face.GetLength() < 32)
 	{
@@ -263,6 +267,8 @@ void CListCtrlFx::SetFontEx(CString face, double zoomRatio, double fontRatio)
 	m_Font.DeleteObject();
 	m_Font.CreateFontIndirect(&logFont);
 	SetFont(&m_Font);
+
+	m_Header.SetFontEx(face, size, zoomRatio, fontRatio);
 }
 
 void CListCtrlFx::PreSubclassWindow()
@@ -275,6 +281,8 @@ void CListCtrlFx::PreSubclassWindow()
 
 void CListCtrlFx::EnableHeaderOwnerDraw(BOOL bOwnerDraw)
 {
+	if (! m_bNT6orLater) { return; }
+
 	if (m_RenderMode & HighContrast)
 	{
 		HDITEM hi = { 0 };

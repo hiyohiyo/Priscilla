@@ -6,9 +6,6 @@
 /*---------------------------------------------------------------------------*/
 
 #include "../stdafx.h"
-#include "DebugPrint.h"
-#include "GetFileVersion.h"
-#include "GetOsInfo.h"
 #include "MainDialog.h"
 
 CMainDialog::CMainDialog(UINT dlgResouce, CWnd* pParent)

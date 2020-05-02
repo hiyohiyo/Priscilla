@@ -229,7 +229,7 @@ void CPriscillaDlg::SetControlFont()
 	m_Meter1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
 	m_Combo1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ComboText, m_ComboTextSelected, FW_NORMAL);
 	m_Edit1.SetFontEx(m_FontFace, 32, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD);
-	m_List1.SetFontEx(m_FontFace, m_ZoomRatio, m_FontRatio);
+	m_List1.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio);
 
 	m_Combo1.SetFontHeight(36, m_ZoomRatio, m_FontRatio);
 	m_Combo1.SetItemHeightEx(-1, 44, m_ZoomRatio, m_FontRatio);
