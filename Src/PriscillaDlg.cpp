@@ -164,12 +164,30 @@ void CPriscillaDlg::UpdateDialogSize()
 	////
 	//// InitControl
 	////
-	m_Static1.InitControl(8, 8, 464, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
-	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BgDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage | m_bHighContrast);
-	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BgDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage | m_bHighContrast);
-	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BgDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast, m_ComboBg, m_ComboBgSelected, m_Glass, m_GlassAlpha);
-	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BgDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast);
-	m_List1.InitControl(8, 148, 464, 72, 464, 72, m_ZoomRatio, &m_BgDC, OwnerDrawGlass | m_bHighContrast);
+	m_Static1.InitControl(8, 8, 464, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
+	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage | m_bHighContrast);
+	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage | m_bHighContrast);
+	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
+
+	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
+	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast);
+
+	m_List1.SetTextColor1(m_ListText1);
+	m_List1.SetTextColor2(m_ListText2);
+	m_List1.SetBkColor1(m_ListBk1);
+	m_List1.SetBkColor2(m_ListBk2);
+	m_List1.SetLineColor1(m_ListLine1);
+	m_List1.SetLineColor2(m_ListLine2);
+	m_List1.SetGlassColor(m_Glass, m_GlassAlpha);
+
+	if (rand() % 2)
+	{
+		m_List1.InitControl(8, 148, 464, 72, 464, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass | m_bHighContrast);
+	}
+	else
+	{
+		m_List1.InitControl(8, 148, 464, 144, 464, 144, m_ZoomRatio, &m_BkDC, OwnerDrawGlass | m_bHighContrast);
+	}
 
 	m_Button1.SetHandCursor();
 	m_Combo1.SetCurSel(0);
@@ -188,7 +206,6 @@ void CPriscillaDlg::UpdateDialogSize()
 		width = (int)(464 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL) - 4);
 	}
 
-	m_List1.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_List1.DeleteAllItems();
 	while (m_List1.DeleteColumn(0)) {}
 	m_List1.InsertColumn(0, L"Column0", LVCFMT_LEFT, (int)(100 * m_ZoomRatio), 0);
@@ -211,8 +228,8 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	m_List1.SetTextColor1(m_ListText1);
 	m_List1.SetTextColor2(m_ListText2);
-	m_List1.SetBkColor1(m_ListBg1);
-	m_List1.SetBkColor2(m_ListBg2);
+	m_List1.SetBkColor1(m_ListBk1);
+	m_List1.SetBkColor2(m_ListBk2);
 	m_List1.SetLineColor1(m_ListLine1);
 	m_List1.SetLineColor2(m_ListLine2);
 

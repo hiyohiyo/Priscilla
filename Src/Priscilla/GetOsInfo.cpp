@@ -145,6 +145,25 @@ BOOL IsWin2k()
 	return b;
 }
 
+BOOL IsNT5()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwMajorVersion == 5)
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
 BOOL IsNT6orLater()
 {
 	static BOOL b = -1;

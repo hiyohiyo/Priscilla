@@ -1,5 +1,4 @@
 Exe/SignAppliAll.bat
-*.ini
 Exe/Priscilla64.ipdb
 Exe/Priscilla64.iobj
 Exe/Priscilla32.ipdb
@@ -8,3 +7,6 @@ Exe/Priscilla.pdb
 Exe/Priscilla.ilk
 Exe/Priscilla.exe
 Src/Priscilla.aps
+Exe/Priscilla64.ini
+Exe/Priscilla32.ini
+Exe/Priscilla.ini

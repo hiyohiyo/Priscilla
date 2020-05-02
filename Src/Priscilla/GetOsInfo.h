@@ -18,6 +18,7 @@ BOOL IsIe556();
 BOOL IsDotNet2();
 BOOL IsDotNet4();
 BOOL IsWin2k();
+BOOL IsNT5();
 BOOL IsNT6orLater();
 BOOL IsXpLuna();
 BOOL HasSidebar();

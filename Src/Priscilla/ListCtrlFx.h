@@ -41,14 +41,14 @@ public:
 	COLORREF GetLineColor1();
 	COLORREF GetLineColor2();
 
-	BOOL InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bgDC, int renderMode);
+	BOOL InitControl(int x, int y, int width, int height, int maxWidth, int maxHeight, double zoomRatio, CDC* bkDC, int renderMode);
 	void SetFontEx(CString face, int size, double zoomRatio, double fontRatio = 1.0);
 	void EnableHeaderOwnerDraw(BOOL bOwnerDraw);
 
 protected:
 	virtual void PreSubclassWindow();
 
-	void SetupControlImage(CBitmap& bgBitmap, CBitmap& ctrlBitmap);
+	void SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap);
 
 	DECLARE_MESSAGE_MAP()
 	afx_msg void OnCustomdraw(NMHDR* pNMHDR, LRESULT* pResult);
@@ -73,14 +73,14 @@ protected:
 
 	CFont    m_Font;
 	CImageList m_Image;
-	CDC* m_BgDC;
+	CDC* m_BkDC;
 
 	// Glass
 	COLORREF m_GlassColor;
 	BYTE m_GlassAlpha;
 
 	// Image
-	CBitmap m_BgBitmap;
+	CBitmap m_BkBitmap;
 	CBitmap m_CtrlBitmap;
 	CImage m_CtrlImage;
 };

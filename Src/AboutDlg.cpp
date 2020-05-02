@@ -80,7 +80,7 @@ void CAboutDlg::UpdateDialogSize()
 	SetClientSize((int)(SIZE_X * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), 0);
 	UpdateBackground(TRUE);
 
-	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BgDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage);
+	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage);
 	m_CtrlCrystalDewWorld.SetHandCursor();
 
 	m_CtrlVersion.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
@@ -92,11 +92,11 @@ void CAboutDlg::UpdateDialogSize()
 	m_CtrlVersion.SetHandCursor();
 	m_CtrlLicense.SetHandCursor();
 
-	m_CtrlVersion.InitControl(152, 12, 316, 36, m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlEdition.InitControl(152, 48, 316, 36, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlRelease.InitControl(152, 88, 316, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlCopyright.InitControl(152, 112, 316, 24, m_ZoomRatio, &m_BgDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
-	m_CtrlLicense.InitControl(152, 136, 316, 24, m_ZoomRatio, &m_BgDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlVersion.InitControl(152, 12, 316, 36, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlEdition.InitControl(152, 48, 316, 36, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlRelease.InitControl(152, 88, 316, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlCopyright.InitControl(152, 112, 316, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent | m_bHighContrast);
+	m_CtrlLicense.InitControl(152, 136, 316, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent | m_bHighContrast);
 
 	Invalidate();
 }
