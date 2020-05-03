@@ -6,27 +6,12 @@
 /*---------------------------------------------------------------------------*/
 
 #include "../stdafx.h"
-#include "GetOsInfo.h"
-#include "GetFileVersion.h"
+#include "OsInfoFx.h"
+#include "UtilityFx.h"
 
-typedef BOOL (WINAPI *FuncGetProductInfo)(DWORD, DWORD, DWORD, DWORD, PDWORD);
-typedef BOOL (WINAPI *FuncGetNativeSystemInfo)(LPSYSTEM_INFO);
-typedef BOOL (WINAPI *FuncIsWow64Process)(HANDLE hProcess,PBOOL Wow64Process);
-
-BOOL IsWow64()
-{
-	static BOOL b = -1;
-	if (b == -1)
-	{
-		b = FALSE;
-		FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(GetModuleHandle(L"kernel32"), "IsWow64Process");
-		if (pIsWow64Process != NULL)
-		{
-			pIsWow64Process(GetCurrentProcess(), &b);
-		}
-	}
-	return b;
-}
+typedef BOOL (WINAPI* FuncGetProductInfo)(DWORD, DWORD, DWORD, DWORD, PDWORD);
+typedef BOOL (WINAPI* FuncGetNativeSystemInfo)(LPSYSTEM_INFO);
+typedef BOOL (WINAPI* FuncIsWow64Process)(HANDLE hProcess,PBOOL Wow64Process);
 
 BOOL IsX64()
 {
@@ -46,6 +31,26 @@ BOOL IsX64()
 		}
 	}
 	return FALSE;
+}
+
+BOOL IsIa64()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		SYSTEM_INFO si = { 0 };
+		FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(GetModuleHandle(L"kernel32"), "GetNativeSystemInfo");
+		if (pGetNativeSystemInfo != NULL)
+		{
+			pGetNativeSystemInfo(&si);
+			if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
+			{
+				b = TRUE;
+			}
+		}
+	}
+	return b;
 }
 
 BOOL IsArm32()
@@ -88,60 +93,90 @@ BOOL IsArm64()
 	return b;
 }
 
-BOOL IsIa64()
+BOOL IsWow64()
 {
 	static BOOL b = -1;
 	if (b == -1)
 	{
 		b = FALSE;
-		SYSTEM_INFO si = { 0 };
-		FuncGetNativeSystemInfo pGetNativeSystemInfo = (FuncGetNativeSystemInfo)GetProcAddress(GetModuleHandle(L"kernel32"), "GetNativeSystemInfo");
-		if (pGetNativeSystemInfo != NULL)
+		FuncIsWow64Process pIsWow64Process = (FuncIsWow64Process)GetProcAddress(GetModuleHandle(L"kernel32"), "IsWow64Process");
+		if (pIsWow64Process != NULL)
 		{
-			pGetNativeSystemInfo(&si);
-			if (si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
+			pIsWow64Process(GetCurrentProcess(), &b);
+		}
+	}
+	return b;
+}
+
+BOOL IsIe556()
+{
+	switch (GetIeVersion())
+	{
+	case 550:
+	case 600:
+		return TRUE;
+		break;
+	default:
+		return FALSE;
+		break;
+	}
+}
+
+BOOL IsDotNet2()
+{
+	static BOOL b = -1;
+
+	if (b == -1)
+	{
+		b = FALSE;
+		DWORD type = REG_DWORD;
+		ULONG size = sizeof(DWORD);
+		HKEY  hKey = NULL;
+		DWORD buf = 0;
+
+		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS
+			|| RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Wow6432Node\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		{
+			if (RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
 			{
-				b = TRUE;
+				if (buf == 1)
+				{
+					b = TRUE;
+				}
 			}
+			RegCloseKey(hKey);
 		}
 	}
-	return b;
+
+	return (BOOL)b;
 }
 
-BOOL HasSidebar()
+BOOL IsDotNet4()
 {
 	static BOOL b = -1;
+
 	if (b == -1)
 	{
 		b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-		if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion < 2 && osvi.wProductType == VER_NT_WORKSTATION)
+		DWORD type = REG_DWORD;
+		ULONG size = sizeof(DWORD);
+		HKEY  hKey = NULL;
+		DWORD buf = 0;
+
+		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client", 0, KEY_READ, &hKey) == ERROR_SUCCESS
+			|| RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
 		{
-			b = TRUE;
+			if (RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
+			{
+				if (buf == 1)
+				{
+					b = TRUE;
+				}
+			}
+			RegCloseKey(hKey);
 		}
 	}
-	return b;
-}
 
-BOOL IsWin2k()
-{
-	static BOOL b = -1;
-	if (b == -1)
-	{
-		b = FALSE;
-		OSVERSIONINFOEX osvi;
-		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-
-		if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
-		{
-			b = TRUE;
-		}
-	}
 	return b;
 }
 
@@ -183,7 +218,26 @@ BOOL IsNT6orLater()
 	return b;
 }
 
-BOOL IsXpLuna()
+BOOL IsWin2k()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0)
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
+BOOL IsWinXpLuna()
 {
 	static BOOL xp = -1;
 	BOOL b = FALSE;
@@ -204,8 +258,8 @@ BOOL IsXpLuna()
 	{ 
 		return FALSE;
 	}
-	// Luna Check
 
+	// Luna Check
 	DWORD type = REG_DWORD;
 	ULONG size = 256;
 	HKEY  hKey = NULL;
@@ -225,6 +279,119 @@ BOOL IsXpLuna()
 		RegCloseKey(hKey);		
 	}
 	return b;
+}
+
+BOOL IsWin8orLater()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+
+		if (osvi.dwMajorVersion <= 5)
+		{
+			b = FALSE;
+		}
+		else if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion <= 1)
+		{
+			b = FALSE;
+		}
+		else
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
+BOOL HasSidebar()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+		OSVERSIONINFOEX osvi;
+		ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+		if (osvi.dwMajorVersion == 6 && osvi.dwMinorVersion < 2 && osvi.wProductType == VER_NT_WORKSTATION)
+		{
+			b = TRUE;
+		}
+	}
+	return b;
+}
+
+DWORD GetIeVersion()
+{
+	static INT ieVersion = -1;
+
+	if (ieVersion != -1)
+	{
+		return ieVersion;
+	}
+
+	DWORD type = REG_SZ;
+	ULONG size = 256;
+	HKEY  hKey = NULL;
+	BYTE  buf[256];
+	CString cstr;
+
+	switch (GetFileVersion(L"Shdocvw.dll"))
+	{
+	case 470: ieVersion = 300;	break;
+	case 471: ieVersion = 400;	break;
+	case 472: ieVersion = 401;	break;
+	case 500: ieVersion = 500;	break;
+	case 550: ieVersion = 550;	break;
+	case 600:
+	default:
+		ieVersion = 600;
+		if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Internet Explorer", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
+		{
+			if (RegQueryValueEx(hKey, L"Version", NULL, &type, buf, &size) == ERROR_SUCCESS)
+			{
+				cstr = (TCHAR*)buf;
+				ieVersion = _tstoi(cstr) * 100;
+				if (ieVersion == 900 && RegQueryValueEx(hKey, L"svcVersion", NULL, &type, buf, &size) == ERROR_SUCCESS)
+				{
+					cstr = (TCHAR*)buf;
+					if (_tstoi(cstr) * 100 > 900)
+					{
+						ieVersion = _tstoi(cstr) * 100;
+					}
+				}
+			}
+		}
+		RegCloseKey(hKey);
+		break;
+	}
+
+	return ieVersion;
+}
+
+DWORD GetWin10Version()
+{
+	OSVERSIONINFOEX osvi;
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+	GetVersionEx((OSVERSIONINFO*)&osvi);
+
+	if (osvi.dwBuildNumber >= 19041) { return 2004; }
+	else if (osvi.dwBuildNumber >= 18363) { return 1909; }
+	else if (osvi.dwBuildNumber >= 18362) { return 1903; }
+	else if (osvi.dwBuildNumber >= 17763) { return 1809; }
+	else if (osvi.dwBuildNumber >= 17134) { return 1803; }
+	else if (osvi.dwBuildNumber >= 16299) { return 1709; }
+	else if (osvi.dwBuildNumber >= 15063) { return 1703; }
+	else if (osvi.dwBuildNumber >= 14393) { return 1607; }
+	else if (osvi.dwBuildNumber >= 10586) { return 1511; }
+	else if (osvi.dwBuildNumber >= 10240) { return 1507; }
+	else { return 0; }
 }
 
 void GetOsName(CString& OsFullName)
@@ -648,144 +815,4 @@ void GetOsName(CString& OsFullName)
 		OsFullName = osFullName;
 		break;
 	}
-}
-
-DWORD GetIeVersion()
-{
-	static INT ieVersion = -1;
-
-	if(ieVersion != -1)
-	{
-		return ieVersion;
-	}
-
-	DWORD type = REG_SZ;
-	ULONG size = 256;
-	HKEY  hKey = NULL;
-	BYTE  buf[256];
-	CString cstr;
-
-	switch(GetFileVersion(L"Shdocvw.dll"))
-	{
-	case 470: ieVersion = 300;	break;
-	case 471: ieVersion = 400;	break;
-	case 472: ieVersion = 401;	break;
-	case 500: ieVersion = 500;	break;
-	case 550: ieVersion = 550;	break;
-	case 600:
-	default:
-		ieVersion = 600;
-		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Internet Explorer", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
-		{
-			if(RegQueryValueEx(hKey, L"Version", NULL, &type, buf, &size) == ERROR_SUCCESS)
-			{
-				cstr = (TCHAR*)buf;
-				ieVersion = _tstoi(cstr) * 100;
-				if(ieVersion == 900 && RegQueryValueEx(hKey, L"svcVersion", NULL, &type, buf, &size) == ERROR_SUCCESS)
-				{
-					cstr = (TCHAR*)buf;
-					if(_tstoi(cstr) * 100 > 900)
-					{
-						ieVersion = _tstoi(cstr) * 100;
-					}
-				}
-			}
-		}
-		RegCloseKey(hKey);
-		break;
-	}
-
-	return ieVersion;
-}
-
-BOOL IsIe556()
-{
-	switch(GetIeVersion())
-	{
-	case 550:
-	case 600:
-		return TRUE;
-		break;
-	default:
-		return FALSE;
-		break;
-	}
-}
-
-BOOL IsDotNet2()
-{
-	static BOOL b = -1;
-
-	if (b == -1)
-	{
-		b = FALSE;
-		DWORD type = REG_DWORD;
-		ULONG size = sizeof(DWORD);
-		HKEY  hKey = NULL;
-		DWORD buf = 0;
-
-		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS
-		|| RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Wow6432Node\\Microsoft\\NET Framework Setup\\NDP\\v2.0.50727", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
-		{
-			if(RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
-			{
-				if(buf == 1)
-				{
-					b = TRUE;
-				}
-			}
-			RegCloseKey(hKey);			
-		}
-	}
-
-	return (BOOL)b;
-}
-
-BOOL IsDotNet4()
-{
-	static BOOL b = -1;
-
-	if (b == -1)
-	{
-		b = FALSE;
-		DWORD type = REG_DWORD;
-		ULONG size = sizeof(DWORD);
-		HKEY  hKey = NULL;
-		DWORD buf = 0;
-
-		if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Client", 0, KEY_READ, &hKey) == ERROR_SUCCESS
-		|| RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full", 0, KEY_READ, &hKey) == ERROR_SUCCESS)
-		{
-			if(RegQueryValueEx(hKey, L"Install", NULL, &type, (LPBYTE)&buf, &size) == ERROR_SUCCESS)
-			{
-				if(buf == 1)
-				{
-					b = TRUE;
-				}
-			}
-			RegCloseKey(hKey);			
-		}
-	}
-
-	return b;
-}
-
-DWORD GetWin10Version()
-{
-	OSVERSIONINFOEX osvi;
-	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-	GetVersionEx((OSVERSIONINFO*)&osvi);
-
-	     if (osvi.dwBuildNumber >= 19041) { return 2004; }
-	else if (osvi.dwBuildNumber >= 18363) { return 1909; }
-	else if (osvi.dwBuildNumber >= 18362) { return 1903; }
-	else if (osvi.dwBuildNumber >= 17763) { return 1809; }
-	else if (osvi.dwBuildNumber >= 17134) { return 1803; }
-	else if (osvi.dwBuildNumber >= 16299) { return 1709; }
-	else if (osvi.dwBuildNumber >= 15063) { return 1703; }
-	else if (osvi.dwBuildNumber >= 14393) { return 1607; }
-	else if (osvi.dwBuildNumber >= 10586) { return 1511; }
-	else if (osvi.dwBuildNumber >= 10240) { return 1507; }
-	else { return 0; }
 }

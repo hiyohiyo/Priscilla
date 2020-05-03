@@ -15,7 +15,7 @@
 #endif
 
 CPriscillaDlg::CPriscillaDlg(CWnd* pParent /*=NULL*/)
-	: CMainDialog(CPriscillaDlg::IDD, pParent)
+	: CMainDialogFx(CPriscillaDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_hIconMini = AfxGetApp()->LoadIcon(IDI_TRAY_ICON);
@@ -37,7 +37,7 @@ CPriscillaDlg::~CPriscillaDlg()
 
 void CPriscillaDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CMainDialog::DoDataExchange(pDX);
+	CMainDialogFx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, m_Button1);
 	DDX_Control(pDX, IDC_COMBO1, m_Combo1);
 	DDX_Control(pDX, IDC_EDIT1, m_Edit1);
@@ -46,7 +46,7 @@ void CPriscillaDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST1, m_List1);
 }
 
-BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialog)
+BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
 	//}}AFX_MSG_MAP
 	ON_COMMAND(ID_FILE_EXIT, OnExit)
 	ON_COMMAND(ID_HELP_ABOUT, OnAbout)
@@ -78,7 +78,7 @@ BOOL CPriscillaDlg::CheckThemeEdition(CString name)
 
 BOOL CPriscillaDlg::OnInitDialog()
 {
-	CMainDialog::OnInitDialog();
+	CMainDialogFx::OnInitDialog();
 
 	m_hAccelerator = ::LoadAccelerators(AfxGetInstanceHandle(),
 		                                MAKEINTRESOURCE(IDR_ACCELERATOR));
@@ -294,7 +294,7 @@ void CPriscillaDlg::OnPaint()
 	}
 	else
 	{
-		CMainDialog::OnPaint();
+		CMainDialogFx::OnPaint();
 	}
 }
 
@@ -321,7 +321,7 @@ void CPriscillaDlg::OnAbout()
 
 void CPriscillaDlg::OnCancel()
 {
-	CMainDialog::OnCancel();
+	CMainDialogFx::OnCancel();
 }
 
 void CPriscillaDlg::EnableMenus()
@@ -401,7 +401,7 @@ BOOL CPriscillaDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 	// Select Theme
 	if (WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize())
 	{
-		CMainDialog::OnCommand(wParam, lParam);
+		CMainDialogFx::OnCommand(wParam, lParam);
 		return TRUE;
 	}
 
@@ -430,7 +430,7 @@ BOOL CPriscillaDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 		menu.Detach();
 	}
 
-	return CMainDialog::OnCommand(wParam, lParam);
+	return CMainDialogFx::OnCommand(wParam, lParam);
 }
 
 void CPriscillaDlg::OnZoom100()

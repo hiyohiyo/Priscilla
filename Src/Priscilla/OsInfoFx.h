@@ -9,6 +9,10 @@
 
 #include <winnt.h>
 
+////------------------------------------------------
+//   OS Info
+////------------------------------------------------
+
 BOOL IsX64();
 BOOL IsIa64();
 BOOL IsArm32();
@@ -17,14 +21,19 @@ BOOL IsWow64();
 BOOL IsIe556();
 BOOL IsDotNet2();
 BOOL IsDotNet4();
-BOOL IsWin2k();
 BOOL IsNT5();
 BOOL IsNT6orLater();
-BOOL IsXpLuna();
+BOOL IsWin2k();
+BOOL IsWinXpLuna();
+BOOL IsWin8orLater();
 BOOL HasSidebar();
-void GetOsName(CString& OsFullName);
 DWORD GetIeVersion();
 DWORD GetWin10Version();
+void GetOsName(CString& OsFullName);
+
+////------------------------------------------------
+//   Define
+////------------------------------------------------
 
 #define PRODUCT_UNDEFINED                           0x00000000
 
@@ -175,7 +184,7 @@ DWORD GetWin10Version();
 #define PRODUCT_CLOUDN                              0x000000B3
 #define PRODUCT_UNLICENSED                          0xABCDABCD
 
-#define SM_TABLETPC             86
-#define SM_MEDIACENTER          87
-#define SM_STARTER              88
-#define SM_SERVERR2             89
+#define SM_TABLETPC                                         86
+#define SM_MEDIACENTER                                      87
+#define SM_STARTER                                          88
+#define SM_SERVERR2                                         89

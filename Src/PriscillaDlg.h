@@ -11,16 +11,16 @@
 #include "FontSelectionDlg.h"
 
 #include "DialogFx.h"
-#include "MainDialog.h"
+#include "MainDialogFx.h"
 #include "ButtonFx.h"
 #include "StaticFx.h"
 #include "EditFx.h"
 #include "ComboBoxFx.h"
 #include "ListCtrlFx.h"
-#include "GetFileVersion.h"
-#include "GetOsInfo.h"
+#include "UtilityFx.h"
+#include "OsInfoFx.h"
 
-class CPriscillaDlg : public CMainDialog
+class CPriscillaDlg : public CMainDialogFx
 {
 public:
 	CPriscillaDlg(CWnd* pParent = NULL);

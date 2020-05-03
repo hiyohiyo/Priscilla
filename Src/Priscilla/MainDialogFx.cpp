@@ -6,9 +6,9 @@
 /*---------------------------------------------------------------------------*/
 
 #include "../stdafx.h"
-#include "MainDialog.h"
+#include "MainDialogFx.h"
 
-CMainDialog::CMainDialog(UINT dlgResouce, CWnd* pParent)
+CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 		:CDialogFx(dlgResouce, pParent)
 {
 	// Common
@@ -38,11 +38,11 @@ CMainDialog::CMainDialog(UINT dlgResouce, CWnd* pParent)
 	m_LangDir.Format(L"%s\\%s", tmp, LANGUAGE_DIR);
 }
 
-CMainDialog::~CMainDialog()
+CMainDialogFx::~CMainDialogFx()
 {
 }
 
-BEGIN_MESSAGE_MAP(CMainDialog, CDialogFx)
+BEGIN_MESSAGE_MAP(CMainDialogFx, CDialogFx)
 	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
@@ -55,7 +55,7 @@ int CALLBACK HasFontProc(ENUMLOGFONTEX* lpelfe, NEWTEXTMETRICEX* lpntme, int Fon
 	return TRUE;
 }
 
-CString CMainDialog::GetDefaultFont()
+CString CMainDialogFx::GetDefaultFont()
 {
 	CClientDC dc(this);
 	LOGFONT logfont;
@@ -74,52 +74,62 @@ CString CMainDialog::GetDefaultFont()
 	}
 }
 
-int CMainDialog::GetFontScale()
+int CMainDialogFx::GetFontScale()
 {
 	return m_FontScale;
 }
 
-double CMainDialog::GetFontRatio()
+double CMainDialogFx::GetFontRatio()
 {
 	return m_FontRatio;
 }
 
-CString CMainDialog::GetFontFace()
+CString CMainDialogFx::GetFontFace()
 {
 	return m_FontFace;
 }
 
-CString CMainDialog::GetCurrentLangPath()
+CString CMainDialogFx::GetCurrentLangPath()
 {
 	return m_CurrentLangPath;
 }
 
-CString CMainDialog::GetDefaultLangPath()
+CString CMainDialogFx::GetDefaultLangPath()
 {
 	return m_DefaultLangPath;
 }
 
-CString CMainDialog::GetThemeDir()
+CString CMainDialogFx::GetThemeDir()
 {
 	return m_ThemeDir;
 }
 
-CString CMainDialog::GetCurrentTheme()
+CString CMainDialogFx::GetCurrentTheme()
 {
 	return m_CurrentTheme;
 }
 
-CString CMainDialog::GetDefaultTheme()
+CString CMainDialogFx::GetDefaultTheme()
 {
 	return m_DefaultTheme;
 }
 
-CString CMainDialog::GetIniPath()
+CString CMainDialogFx::GetParentTheme1()
+{
+	return m_ParentTheme1;
+}
+
+CString CMainDialogFx::GetParentTheme2()
+{
+	return m_ParentTheme2;
+}
+
+CString CMainDialogFx::GetIniPath()
 {
 	return m_Ini;
 }
 
-void CMainDialog::SetWindowTitle(CString message)
+void CMainDialogFx::SetWindowTitle(CString message)
 {
 	CString title;
 
@@ -135,7 +145,7 @@ void CMainDialog::SetWindowTitle(CString message)
 	SetWindowText(title);
 }
 
-void CMainDialog::InitThemeLang()
+void CMainDialogFx::InitThemeLang()
 {
 	TCHAR str[256];
 	TCHAR *ptrEnd;
@@ -224,7 +234,7 @@ void CMainDialog::InitThemeLang()
 	UpdateThemeInfo();
 }
 
-void CMainDialog::InitMenu()
+void CMainDialogFx::InitMenu()
 {
 	CMenu menu;
 	CMenu subMenu;
@@ -353,24 +363,24 @@ void CMainDialog::InitMenu()
 	}
 }
 
-BOOL CMainDialog::CheckThemeEdition(CString name)
+BOOL CMainDialogFx::CheckThemeEdition(CString name)
 {
 	if (name.Find(L".") != 0) { return TRUE; }
 
 	return FALSE;
 }
 
-BOOL CMainDialog::OnInitDialog()
+BOOL CMainDialogFx::OnInitDialog()
 {
 	return CDialogFx::OnInitDialog();
 }
 
-void CMainDialog::ChangeTheme(CString ThemeName)
+void CMainDialogFx::ChangeTheme(CString ThemeName)
 {
 	WritePrivateProfileString(L"Setting", m_ThemeKeyName, ThemeName, m_Ini);
 }
 
-BOOL CMainDialog::OnCommand(WPARAM wParam, LPARAM lParam) 
+BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
 	// Select Theme
 	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize())
@@ -394,7 +404,7 @@ BOOL CMainDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 	return CDialogFx::OnCommand(wParam, lParam);
 }
 
-void CMainDialog::OnWindowPosChanging(WINDOWPOS * lpwndpos)
+void CMainDialogFx::OnWindowPosChanging(WINDOWPOS * lpwndpos)
 {
 	if(! m_bShowWindow)
 	{
@@ -413,19 +423,19 @@ void CMainDialog::OnWindowPosChanging(WINDOWPOS * lpwndpos)
     CDialogFx::OnWindowPosChanging(lpwndpos);
 }
 
-DWORD CMainDialog::GetZoomType()
+DWORD CMainDialogFx::GetZoomType()
 {
 	return GetPrivateProfileInt(L"Setting", L"ZoomType", ZoomTypeAuto, m_Ini);
 }
 
-void CMainDialog::SetZoomType(DWORD zoomType)
+void CMainDialogFx::SetZoomType(DWORD zoomType)
 {
 	CString cstr;
 	cstr.Format(L"%d", m_ZoomType);
 	WritePrivateProfileString(L"Setting", L"ZoomType", cstr, m_Ini);
 }
 
-void CMainDialog::UpdateThemeInfo()
+void CMainDialogFx::UpdateThemeInfo()
 {
 	CString theme = m_ThemeDir + m_CurrentTheme + L"\\theme.ini";
 
@@ -448,14 +458,17 @@ void CMainDialog::UpdateThemeInfo()
 	m_ListLine2 = GetControlColor(L"ListLine2", 0, theme);
 	m_Glass = GetControlColor(L"Glass", 255, theme);
 
-	m_CharacterPosition = GetCharacterPosition(theme);
-
 	m_ComboAlpha = GetControlAlpha(L"ComboAlpha", 255, theme);
 	m_EditAlpha = GetControlAlpha(L"EditAlpha", 255, theme);
 	m_GlassAlpha = GetControlAlpha(L"GlassAlpha", 128, theme);
+
+	m_CharacterPosition = GetCharacterPosition(theme);
+
+	m_ParentTheme1 = GetParentTheme(1, theme);
+	m_ParentTheme2 = GetParentTheme(2, theme);
 }
 
-COLORREF CMainDialog::GetControlColor(CString name, BYTE defaultColor, CString theme)
+COLORREF CMainDialogFx::GetControlColor(CString name, BYTE defaultColor, CString theme)
 {
 	COLORREF reverseColor;
 
@@ -466,18 +479,29 @@ COLORREF CMainDialog::GetControlColor(CString name, BYTE defaultColor, CString t
 	return color;
 }
 
-BYTE CMainDialog::GetControlAlpha(CString name, BYTE defaultAlpha, CString theme)
+BYTE CMainDialogFx::GetControlAlpha(CString name, BYTE defaultAlpha, CString theme)
 {
 	BYTE alpha = GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
 	
 	return alpha;
 }
 
-BYTE CMainDialog::GetCharacterPosition(CString theme)
+BYTE CMainDialogFx::GetCharacterPosition(CString theme)
 {
 	BYTE position = GetPrivateProfileInt(L"Character", L"Position", 0, theme);
 
 	return position;
+}
+
+CString CMainDialogFx::GetParentTheme(int i, CString theme)
+{
+	CString cstr;
+	cstr.Format(L"ParentTheme%d", i);
+	TCHAR str[256];
+	GetPrivateProfileString(L"Info", cstr, L"", str, 256, theme);
+	cstr = str;
+
+	return cstr;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,10 +512,10 @@ BYTE CMainDialog::GetCharacterPosition(CString theme)
 
 #ifdef OPTION_TASK_TRAY
 
-UINT CMainDialog::wmTaskbarCreated = ::RegisterWindowMessage(L"TaskbarCreated");
+UINT CMainDialogFx::wmTaskbarCreated = ::RegisterWindowMessage(L"TaskbarCreated");
 
 // Add TaskTray
-BOOL CMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
+BOOL CMainDialogFx::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 {
 	if(m_bResident)
 	{
@@ -524,7 +548,7 @@ BOOL CMainDialog::AddTaskTray(UINT id, UINT callback, HICON icon, CString tip)
 }
 
 // Update TaskTray Icon
-BOOL CMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
+BOOL CMainDialogFx::ModifyTaskTrayIcon(UINT id, HICON icon)
 {
 	if(m_bResident)
 	{
@@ -547,7 +571,7 @@ BOOL CMainDialog::ModifyTaskTrayIcon(UINT id, HICON icon)
 }
 
 // Update TaskTray Tips
-BOOL CMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
+BOOL CMainDialogFx::ModifyTaskTrayTip(UINT id, CString tip)
 {
 	if(m_bResident)
 	{
@@ -572,7 +596,7 @@ BOOL CMainDialog::ModifyTaskTrayTip(UINT id, CString tip)
 }
 
 // Update TaskTray
-BOOL CMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
+BOOL CMainDialogFx::ModifyTaskTray(UINT id, HICON icon, CString tip)
 {
 	if(m_bResident)
 	{
@@ -597,7 +621,7 @@ BOOL CMainDialog::ModifyTaskTray(UINT id, HICON icon, CString tip)
 }
 
 // Show Balloon
-BOOL CMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CString info)
+BOOL CMainDialogFx::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CString info)
 {
 	if(m_bResident)
 	{
@@ -624,7 +648,7 @@ BOOL CMainDialog::ShowBalloon(UINT id, DWORD infoFlag, CString infoTitle, CStrin
 }
 
 // Remove TaskTray
-BOOL CMainDialog::RemoveTaskTray(UINT id)
+BOOL CMainDialogFx::RemoveTaskTray(UINT id)
 {
 	if(m_bResident)
 	{

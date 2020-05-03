@@ -7,9 +7,9 @@
 
 #include "../stdafx.h"
 #include "../Resource.h"
-#include "GetOsInfo.h"
-#include "GetFileVersion.h"
 #include "DialogFx.h"
+#include "UtilityFx.h"
+#include "OsInfoFx.h"
 
 #include <Shlwapi.h>
 #include <strsafe.h>
@@ -356,6 +356,16 @@ CString CDialogFx::IP(CString imageName) /// ImagePath
 {
 	CString imagePath;
 	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_CurrentTheme.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
+	if (IsFileExist(imagePath))
+	{
+		return imagePath;
+	}
+	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_ParentTheme1.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
+	if (IsFileExist(imagePath))
+	{
+		return imagePath;
+	}
+	imagePath.Format(L"%s%s\\%s-%03d.png", m_ThemeDir.GetString(), m_ParentTheme2.GetString(), imageName.GetString(), (DWORD)(m_ZoomRatio * 100));
 	if (IsFileExist(imagePath))
 	{
 		return imagePath;

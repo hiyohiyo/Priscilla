@@ -7,15 +7,14 @@
 
 #pragma once
 #include "DialogFx.h"
-#include "DebugPrint.h"
-#include "GetFileVersion.h"
-#include "GetOsInfo.h"
+#include "UtilityFx.h"
+#include "OsInfoFx.h"
 
-class CMainDialog : public CDialogFx
+class CMainDialogFx : public CDialogFx
 {
 public:
-	CMainDialog(UINT dlgResouce, CWnd* pParent = NULL);
-	virtual ~CMainDialog();
+	CMainDialogFx(UINT dlgResouce, CWnd* pParent = NULL);
+	virtual ~CMainDialogFx();
 
 	// Zoom
 	DWORD GetZoomType();
@@ -30,6 +29,8 @@ public:
 	CString GetThemeDir();
 	CString GetCurrentTheme();
 	CString GetDefaultTheme();
+	CString GetParentTheme1();
+	CString GetParentTheme2();
 	CString GetIniPath();
 
 protected:
@@ -41,6 +42,7 @@ protected:
 	COLORREF GetControlColor(CString name, BYTE defaultColor, CString theme);
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
+	CString GetParentTheme(int i, CString theme);
 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);

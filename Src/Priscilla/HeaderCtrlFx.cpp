@@ -7,7 +7,7 @@
 
 #include "../stdafx.h"
 #include "HeaderCtrlFx.h"
-#include "GetOsInfo.h"
+#include "OsInfoFx.h"
 
 IMPLEMENT_DYNAMIC(CHeaderCtrlFx, CHeaderCtrl)
 
@@ -146,7 +146,7 @@ LRESULT CHeaderCtrlFx::OnLayout(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lResult = CHeaderCtrl::DefWindowProc(HDM_LAYOUT, 0, lParam);
 
-	if (IsXpLuna())
+	if (IsWinXpLuna())
 	{
 		HD_LAYOUT& hdl = *(HD_LAYOUT*)lParam;
 		RECT* prc = hdl.prc;

@@ -7,7 +7,7 @@
 
 #include "../stdafx.h"
 #include "ListCtrlFx.h"
-#include "GetOsInfo.h"
+#include "OsInfoFx.h"
 
 IMPLEMENT_DYNAMIC(CListCtrlFx, CListCtrl)
 

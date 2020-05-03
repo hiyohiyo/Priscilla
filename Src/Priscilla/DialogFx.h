@@ -101,16 +101,19 @@ protected:
 	COLORREF m_ListLine2;
 	COLORREF m_Glass;
 
-	BYTE     m_CharacterPosition;
-
 	BYTE     m_ComboAlpha;
 	BYTE     m_EditAlpha;
 	BYTE     m_GlassAlpha;
 
+	BYTE     m_CharacterPosition;
+
 	// Theme for SubClass
+	int m_OffsetX;
 	CString m_ThemeDir;
 	CString m_CurrentTheme;
 	CString m_DefaultTheme;
+	CString m_ParentTheme1;
+	CString m_ParentTheme2;
 
 	// Language for SubClass
 	CString m_LangDir;
