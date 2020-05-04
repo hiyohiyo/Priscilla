@@ -13,7 +13,6 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 日本語 (日本) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
@@ -84,8 +83,8 @@ MENU IDR_MENU
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     PUSHBUTTON      "Button",IDC_BUTTON1,7,25,53,43
-    LTEXT           "スタティック",IDC_STATIC1,68,25,191,43
-    LTEXT           "スタティック",IDC_METER1,7,7,132,14
+    LTEXT           "",IDC_STATIC1,68,25,191,43
+    LTEXT           "",IDC_METER1,7,7,132,14
     EDITTEXT        IDC_EDIT1,7,83,252,24,ES_AUTOHSCROLL
     COMBOBOX        IDC_COMBO1,144,7,48,30,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_SORT | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
     CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,124,252,214
@@ -116,7 +115,6 @@ BEGIN
     PUSHBUTTON      "Default",IDC_SET_DEFAULT,26,17,156,107,BS_CENTER
     PUSHBUTTON      "OK",ID_OK,48,68,83,14,BS_CENTER
 END
-
 
 /////////////////////////////////////////////////////////////////////////////
 //

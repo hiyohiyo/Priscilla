@@ -209,8 +209,8 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_List1.DeleteAllItems();
 	while (m_List1.DeleteColumn(0)) {}
 	m_List1.InsertColumn(0, L"Column0", LVCFMT_LEFT, (int)(100 * m_ZoomRatio), 0);
-	m_List1.InsertColumn(1, L"Column1", LVCFMT_LEFT, (int)(100 * m_ZoomRatio), 0);
-	m_List1.InsertColumn(2, L"Column2", LVCFMT_LEFT, (int)(width - 200 * m_ZoomRatio), 0);
+	m_List1.InsertColumn(1, L"Column1", LVCFMT_CENTER, (int)(100 * m_ZoomRatio), 0);
+	m_List1.InsertColumn(2, L"Column2", LVCFMT_RIGHT, (int)(width - 200 * m_ZoomRatio), 0);
 	m_List1.InsertItem(0, L"Item0-0");
 	m_List1.InsertItem(1, L"Item1-0");
 	m_List1.InsertItem(2, L"Item2-0");

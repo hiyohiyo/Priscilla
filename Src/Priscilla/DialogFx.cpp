@@ -496,8 +496,8 @@ afx_msg LRESULT CDialogFx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
 	if (m_bInitializing) { return 0; }
 
-	static DWORD preTime = 0;
-	DWORD currentTime = GetTickCount();
+	static ULONGLONG preTime = 0;
+	ULONGLONG currentTime = GetTickCountFx();
 	if (currentTime - preTime < 1000)
 	{
 		return 0;

@@ -40,7 +40,7 @@ void DebugPrint(CString cstr)
 	static DWORD first = (DWORD)GetTickCountFx();
 	CString output;
 
-	output.Format(L"%08d ", GetTickCountFx() - first);
+	output.Format(L"%08d ", (DWORD)GetTickCountFx() - first);
 	output += cstr;
 	output.Append(L"\n");
 	output.Replace(L"\r", L"");

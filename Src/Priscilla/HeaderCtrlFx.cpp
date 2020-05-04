@@ -18,6 +18,7 @@ CHeaderCtrlFx::CHeaderCtrlFx()
 
 	m_TextColor = RGB(0, 0, 0);
 	m_LineColor = RGB(224, 224, 224);
+	m_BkColor = RGB(255, 255, 255);
 	m_ZoomRatio = 1.0;
 	m_FontRatio = 1.0;
 	m_FontSize = 12;
@@ -95,14 +96,27 @@ void CHeaderCtrlFx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
 	HDITEM hi;
 	TCHAR str[256];
-	hi.mask = HDI_TEXT;
+	hi.mask = HDI_TEXT | HDI_FORMAT;
 	hi.pszText = str;
 	hi.cchTextMax = 256;
 	GetItem(lpDrawItemStruct->itemID, &hi);
 
 	rect = (CRect)(lpDrawItemStruct->rcItem);
-	rect.left += 4;
-	drawDC->DrawText(hi.pszText, lstrlen(hi.pszText), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+
+	if (hi.fmt & HDF_CENTER)
+	{
+		drawDC->DrawText(hi.pszText, lstrlen(hi.pszText), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	}
+	else if (hi.fmt & HDF_RIGHT)
+	{
+		rect.right -= 6;
+		drawDC->DrawText(hi.pszText, lstrlen(hi.pszText), rect, DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
+	}
+	else
+	{
+		rect.left += 6;
+		drawDC->DrawText(hi.pszText, lstrlen(hi.pszText), rect, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+	}
 }
 
 void CHeaderCtrlFx::OnPaint()
