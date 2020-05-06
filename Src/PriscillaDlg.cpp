@@ -256,7 +256,7 @@ void CPriscillaDlg::SetControlFont()
 	m_List1.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio);
 
 	m_Combo1.SetFontHeight(36, m_ZoomRatio, m_FontRatio);
-	m_Combo1.SetItemHeightEx(-1, 44, m_ZoomRatio, m_FontRatio);
+	m_Combo1.SetItemHeightEx(-1, 48, m_ZoomRatio, m_FontRatio);
 	for (int i = 0; i < m_Combo1.GetCount(); i++)
 	{
 		m_Combo1.SetItemHeightEx(i, 32, m_ZoomRatio, m_FontRatio);
