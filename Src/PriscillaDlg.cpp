@@ -171,6 +171,7 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast);
+	m_Edit1.Adjust();
 
 	m_List1.SetTextColor1(m_ListText1);
 	m_List1.SetTextColor2(m_ListText2);
@@ -252,7 +253,7 @@ void CPriscillaDlg::SetControlFont()
 	m_Button1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
 	m_Meter1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
 	m_Combo1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ComboText, m_ComboTextSelected, FW_NORMAL);
-	m_Edit1.SetFontEx(m_FontFace, 32, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD);
+	m_Edit1.SetFontEx(m_FontFace, 24, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD);
 	m_List1.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio);
 
 	m_Combo1.SetFontHeight(36, m_ZoomRatio, m_FontRatio);
