@@ -9,10 +9,14 @@
 #include "Priscilla.h"
 #include "PriscillaDlg.h"
 #include "AboutDlg.h"
+#include "DarkMode.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+
+extern bool g_darkModeEnabled;
 
 CPriscillaDlg::CPriscillaDlg(CWnd* pParent /*=NULL*/)
 	: CMainDialogFx(CPriscillaDlg::IDD, pParent)
@@ -164,13 +168,12 @@ void CPriscillaDlg::UpdateDialogSize()
 	////
 	//// InitControl
 	////
-	m_Static1.InitControl(8, 8, 464, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent | m_bHighContrast);
-	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage | m_bHighContrast);
-	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage | m_bHighContrast);
-	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
-
+	m_Static1.InitControl(8, 8, 464, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, FALSE);
+	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
+	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
+	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
-	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass | m_bHighContrast);
+	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_Edit1.Adjust();
 
 	m_List1.SetTextColor1(m_ListText1);
@@ -183,11 +186,11 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	if (rand() % 2)
 	{
-		m_List1.InitControl(8, 148, 464, 72, 464, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass | m_bHighContrast);
+		m_List1.InitControl(8, 148, 464, 72, 464, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
 	}
 	else
 	{
-		m_List1.InitControl(8, 148, 464, 144, 464, 144, m_ZoomRatio, &m_BkDC, OwnerDrawGlass | m_bHighContrast);
+		m_List1.InitControl(8, 148, 464, 144, 464, 144, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
 	}
 
 	m_Button1.SetHandCursor();
@@ -238,6 +241,16 @@ void CPriscillaDlg::UpdateDialogSize()
 	info.cbSize = sizeof(COMBOBOXINFO);
 	m_Combo1.GetComboBoxInfo(&info);
 	SetLayeredWindow(info.hwndList, m_ComboAlpha);
+
+	// Dark Mode Support
+	SetWindowTheme(m_Button1.GetSafeHwnd(), L"Explorer", nullptr);
+	SetWindowTheme(m_Combo1.GetSafeHwnd(), L"Explorer", nullptr);
+
+	SendMessageW(WM_THEMECHANGED, 0, 0);
+	AllowDarkModeForWindow(m_Button1.GetSafeHwnd(), g_darkModeEnabled);
+	::SendMessageW(m_Button1.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
+//	AllowDarkModeForWindow(m_Combo1.GetSafeHwnd(), g_darkModeEnabled);
+//	::SendMessageW(m_Combo1.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
 
 	Invalidate();
 

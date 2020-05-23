@@ -418,6 +418,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Priscilla\DarkMode.cpp" />
     <ClCompile Include="Priscilla\DialogFx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -468,9 +469,11 @@
     <ClInclude Include="Priscilla\ButtonFx.h" />
     <ClInclude Include="Priscilla\ComboBoxFx.h" />
     <ClInclude Include="Priscilla\CommonFx.h" />
+    <ClInclude Include="Priscilla\DarkMode.h" />
     <ClInclude Include="Priscilla\DialogFx.h" />
     <ClInclude Include="Priscilla\EditFx.h" />
     <ClInclude Include="Priscilla\FontComboBoxFx.h" />
+    <ClInclude Include="Priscilla\IatHook.h" />
     <ClInclude Include="Priscilla\OsInfoFx.h" />
     <ClInclude Include="Priscilla\HeaderCtrlFx.h" />
     <ClInclude Include="Priscilla\ListCtrlFx.h" />
