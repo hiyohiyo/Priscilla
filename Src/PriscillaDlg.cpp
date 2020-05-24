@@ -15,8 +15,7 @@
 #define new DEBUG_NEW
 #endif
 
-
-extern bool g_darkModeEnabled;
+// extern bool g_darkModeEnabled;
 
 CPriscillaDlg::CPriscillaDlg(CWnd* pParent /*=NULL*/)
 	: CMainDialogFx(CPriscillaDlg::IDD, pParent)
@@ -159,10 +158,12 @@ typedef UINT(WINAPI* FuncGetDpiForWindow) (HWND hWnd);
 
 void CPriscillaDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	ShowWindow(SW_HIDE);
 
 	SetClientSize((int)(m_SizeX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio), 1);
-	UpdateBackground(TRUE);
+	UpdateBackground(TRUE, FALSE);
 	SetControlFont();
 
 	////
@@ -230,27 +231,16 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	m_List1.EnableHeaderOwnerDraw(TRUE);
 
-	m_List1.SetTextColor1(m_ListText1);
-	m_List1.SetTextColor2(m_ListText2);
-	m_List1.SetBkColor1(m_ListBk1);
-	m_List1.SetBkColor2(m_ListBk2);
-	m_List1.SetLineColor1(m_ListLine1);
-	m_List1.SetLineColor2(m_ListLine2);
-
-	COMBOBOXINFO info = { 0 };
-	info.cbSize = sizeof(COMBOBOXINFO);
-	m_Combo1.GetComboBoxInfo(&info);
-	SetLayeredWindow(info.hwndList, m_ComboAlpha);
+	SetLayeredWindow(m_Combo1.GetListHwnd(), m_ComboAlpha);
 
 	// Dark Mode Support
-	SetWindowTheme(m_Button1.GetSafeHwnd(), L"Explorer", nullptr);
-	SetWindowTheme(m_Combo1.GetSafeHwnd(), L"Explorer", nullptr);
-
-	SendMessageW(WM_THEMECHANGED, 0, 0);
-	AllowDarkModeForWindow(m_Button1.GetSafeHwnd(), g_darkModeEnabled);
-	::SendMessageW(m_Button1.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
-//	AllowDarkModeForWindow(m_Combo1.GetSafeHwnd(), g_darkModeEnabled);
-//	::SendMessageW(m_Combo1.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
+	// SetWindowTheme(m_Button1.GetSafeHwnd(), L"Explorer", nullptr);
+	// SetWindowTheme(m_Combo1.GetSafeHwnd(), L"Explorer", nullptr);
+	// SendMessageW(WM_THEMECHANGED, 0, 0);
+	// AllowDarkModeForWindow(m_Button1.GetSafeHwnd(), m_bDarkMode);
+	// ::SendMessageW(m_Button1.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
+	// AllowDarkModeForWindow(m_Combo1.GetSafeHwnd(), m_bDarkMode);
+	// ::SendMessageW(m_Combo1.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
 
 	Invalidate();
 

@@ -80,13 +80,15 @@ BOOL CFontSelectionDlg::OnInitDialog()
 
 void CFontSelectionDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	COLORREF textColor = RGB(0, 0, 0);
 	COLORREF textSelectedColor = RGB(0, 0, 0);
 
 	ChangeZoomType(m_ZoomType);
 	SetClientSize((int)(SIZE_X * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), 0);
 
-	UpdateBackground();
+	UpdateBackground(FALSE, m_bDarkMode);
 
 	m_LabelFontFace.InitControl(8, 8, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
 	m_LabelFontScale.InitControl(8, 76, 432, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, m_bDarkMode);
@@ -122,6 +124,15 @@ void CFontSelectionDlg::UpdateDialogSize()
 	
 	m_CtrlSetDefault.SetHandCursor();
 	m_CtrlOk.SetHandCursor();
+
+	// Dark Mode Support
+	SetWindowTheme(m_CtrlSetDefault.GetSafeHwnd(), L"Explorer", nullptr);
+	SetWindowTheme(m_CtrlOk.GetSafeHwnd(), L"Explorer", nullptr);
+	SendMessageW(WM_THEMECHANGED, 0, 0);
+	AllowDarkModeForWindow(m_CtrlSetDefault.GetSafeHwnd(), m_bDarkMode);
+	::SendMessageW(m_CtrlSetDefault.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
+	AllowDarkModeForWindow(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
+	::SendMessageW(m_CtrlOk.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
 
 	Invalidate();
 }

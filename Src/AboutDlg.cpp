@@ -75,12 +75,13 @@ END_MESSAGE_MAP()
 
 void CAboutDlg::UpdateDialogSize()
 {
+	CDialogFx::UpdateDialogSize();
+
 	ChangeZoomType(m_ZoomType);
-
 	SetClientSize((int)(SIZE_X * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), 0);
-	UpdateBackground(TRUE);
+	UpdateBackground(TRUE, m_bDarkMode);
 
-	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, m_bHighContrast, m_bDarkMode);
+	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
 	m_CtrlCrystalDewWorld.SetHandCursor();
 
 	m_CtrlVersion.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_BOLD);
