@@ -32,7 +32,9 @@
 #define IDC_COMBO1                      1303
 #define IDC_STATIC1                     1304
 #define IDC_METER1                      1305
+#define IDC_BUTTON2                     1306
 #define ID_FILE_EXIT                    32771
+#define ID_FILE_SAVE_IMAGE              32772
 #define ID_ZOOM_100                     32800
 #define ID_ZOOM_125                     32801
 #define ID_ZOOM_150                     32802
@@ -53,7 +55,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        200
 #define _APS_NEXT_COMMAND_VALUE         33000
-#define _APS_NEXT_CONTROL_VALUE         1306
+#define _APS_NEXT_CONTROL_VALUE         1307
 #define _APS_NEXT_SYMED_VALUE           50
 #endif
 #endif

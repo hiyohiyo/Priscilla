@@ -11,6 +11,8 @@
 #include "AboutDlg.h"
 #include "DarkMode.h"
 
+#include "dwmapi.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -42,6 +44,7 @@ void CPriscillaDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CMainDialogFx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON1, m_Button1);
+	DDX_Control(pDX, IDC_BUTTON2, m_Button2);
 	DDX_Control(pDX, IDC_COMBO1, m_Combo1);
 	DDX_Control(pDX, IDC_EDIT1, m_Edit1);
 	DDX_Control(pDX, IDC_STATIC1, m_Static1);
@@ -52,6 +55,7 @@ void CPriscillaDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
 	//}}AFX_MSG_MAP
 	ON_COMMAND(ID_FILE_EXIT, OnExit)
+	ON_COMMAND(ID_FILE_SAVE_IMAGE, OnSaveImage)
 	ON_COMMAND(ID_HELP_ABOUT, OnAbout)
 	ON_COMMAND(ID_ZOOM_100, &CPriscillaDlg::OnZoom100)
 	ON_COMMAND(ID_ZOOM_125, &CPriscillaDlg::OnZoom125)
@@ -65,6 +69,7 @@ BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
 	ON_COMMAND(ID_FONT_SETTING, &CPriscillaDlg::OnFontSetting)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON1, &CPriscillaDlg::OnButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CPriscillaDlg::OnButton2)
 END_MESSAGE_MAP()
 
 LRESULT CPriscillaDlg::OnQueryEndSession(WPARAM wParam, LPARAM lParam)
@@ -169,8 +174,9 @@ void CPriscillaDlg::UpdateDialogSize()
 	////
 	//// InitControl
 	////
-	m_Static1.InitControl(8, 8, 464, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, FALSE);
+	m_Static1.InitControl(8, 8, 392, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, FALSE);
 	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
+	m_Button2.InitControl(400, 8, 72, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, FALSE);
 	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
 	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
@@ -195,6 +201,7 @@ void CPriscillaDlg::UpdateDialogSize()
 	}
 
 	m_Button1.SetHandCursor();
+	m_Button2.SetHandCursor();
 	m_Combo1.SetCurSel(0);
 	m_Combo1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
@@ -254,9 +261,10 @@ void CPriscillaDlg::SetControlFont()
 	////
 	m_Static1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
 	m_Button1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
+	m_Button2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
 	m_Meter1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
 	m_Combo1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ComboText, m_ComboTextSelected, FW_NORMAL);
-	m_Edit1.SetFontEx(m_FontFace, 24, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD);
+	m_Edit1.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD);
 	m_List1.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio);
 
 	m_Combo1.SetFontHeight(36, m_ZoomRatio, m_FontRatio);
@@ -317,6 +325,11 @@ void CPriscillaDlg::OnExit()
 	OnCancel();
 }
 
+void CPriscillaDlg::OnSaveImage()
+{
+	SaveImage();
+}
+
 void CPriscillaDlg::OnAbout()
 {
 	m_AboutDlg = new CAboutDlg(this);
@@ -372,6 +385,9 @@ void CPriscillaDlg::ChangeLang(CString LangName)
 	{
 		menu->ModifyMenu(3, MF_BYPOSITION | MF_STRING, 3, cstr + L"(&Language)");
 	}
+
+	cstr = i18n(L"Menu", L"FILE_SAVE_IMAGE") + L"\tCtrl + S";
+	menu->ModifyMenu(ID_FILE_SAVE_IMAGE, MF_STRING, ID_FILE_SAVE_IMAGE, cstr);
 
 	cstr = i18n(L"Menu", L"FILE_EXIT") + L"\tAlt + F4";
 	menu->ModifyMenu(ID_FILE_EXIT, MF_STRING, ID_FILE_EXIT, cstr);
@@ -608,3 +624,19 @@ void CPriscillaDlg::OnButton1()
 	m_Meter1.SetWindowTextW(cstr);
 	m_Meter1.SetMeter(TRUE, value / 100.0);
 }
+
+void CPriscillaDlg::OnButton2()
+{
+	static BOOL bDarkMode = TRUE;
+	if (bDarkMode)
+	{
+		SetDarkModeControl(m_Button2.GetSafeHwnd(), bDarkMode);
+		bDarkMode = FALSE;
+	}
+	else
+	{
+		SetDarkModeControl(m_Button2.GetSafeHwnd(), bDarkMode);
+		bDarkMode = TRUE;
+	}
+}
+

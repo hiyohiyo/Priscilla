@@ -83,6 +83,7 @@ MENU IDR_MENU
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
     PUSHBUTTON      "Button",IDC_BUTTON1,7,25,53,43
+    PUSHBUTTON      "Test", IDC_BUTTON2, 7, 25, 53, 43
     COMBOBOX        IDC_COMBO1,144,7,48,30,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_SORT | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
     LTEXT           "",IDC_STATIC1,68,25,191,43
     LTEXT           "",IDC_METER1,7,7,132,14
@@ -201,6 +202,7 @@ IDR_MENU MENU
 BEGIN
     POPUP "&File"
     BEGIN
+        MENUITEM "Save (image)",                ID_FILE_SAVE_IMAGE
         MENUITEM "Exit",                        ID_FILE_EXIT
     END
     POPUP "&Theme"
@@ -258,6 +260,7 @@ IDI_TRAY_ICON           ICON                    "res\\Priscilla16.ico"
 
 IDR_ACCELERATOR ACCELERATORS
 BEGIN
+    "S",            ID_FILE_SAVE_IMAGE,     VIRTKEY, CONTROL, NOINVERT
     VK_F4,          ID_FILE_EXIT,           VIRTKEY, ALT, NOINVERT
     VK_F1,          ID_HELP,                VIRTKEY, NOINVERT
     "F",            ID_FONT_SETTING,        VIRTKEY, CONTROL, NOINVERT

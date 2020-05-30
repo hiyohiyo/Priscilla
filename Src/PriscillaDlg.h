@@ -65,6 +65,7 @@ protected:
 	afx_msg void OnZoom300();
 	afx_msg void OnZoomAuto();
 	afx_msg void OnExit();
+	afx_msg void OnSaveImage();
 	afx_msg void OnAbout();
 	afx_msg void OnFontSetting();
 	afx_msg void OnHelp();
@@ -81,6 +82,7 @@ protected:
 	CAboutDlg* m_AboutDlg;
 
 	CButtonFx m_Button1;
+	CButtonFx m_Button2;
 	CComboBoxFx m_Combo1;
 	CEditFx m_Edit1;
 	CStaticFx m_Static1;
@@ -88,4 +90,5 @@ protected:
 	CListCtrlFx m_List1;
 public:
 	afx_msg void OnButton1();
+	afx_msg void OnButton2();
 };

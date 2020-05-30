@@ -125,14 +125,8 @@ void CFontSelectionDlg::UpdateDialogSize()
 	m_CtrlSetDefault.SetHandCursor();
 	m_CtrlOk.SetHandCursor();
 
-	// Dark Mode Support
-	SetWindowTheme(m_CtrlSetDefault.GetSafeHwnd(), L"Explorer", nullptr);
-	SetWindowTheme(m_CtrlOk.GetSafeHwnd(), L"Explorer", nullptr);
-	SendMessageW(WM_THEMECHANGED, 0, 0);
-	AllowDarkModeForWindow(m_CtrlSetDefault.GetSafeHwnd(), m_bDarkMode);
-	::SendMessageW(m_CtrlSetDefault.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
-	AllowDarkModeForWindow(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
-	::SendMessageW(m_CtrlOk.GetSafeHwnd(), WM_THEMECHANGED, 0, 0);
+	SetDarkModeControl(m_CtrlSetDefault.GetSafeHwnd(), m_bDarkMode);
+	SetDarkModeControl(m_CtrlOk.GetSafeHwnd(), m_bDarkMode);
 
 	Invalidate();
 }
