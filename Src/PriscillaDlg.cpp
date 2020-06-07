@@ -17,8 +17,6 @@
 #define new DEBUG_NEW
 #endif
 
-// extern bool g_darkModeEnabled;
-
 CPriscillaDlg::CPriscillaDlg(CWnd* pParent /*=NULL*/)
 	: CMainDialogFx(CPriscillaDlg::IDD, pParent)
 {

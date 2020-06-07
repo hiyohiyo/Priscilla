@@ -10,3 +10,5 @@ Src/Priscilla.aps
 Exe/Priscilla64.ini
 Exe/Priscilla32.ini
 Exe/Priscilla.ini
+Exe/CodeSignPriscilla.uws
+Exe/SignCurtum.bat
