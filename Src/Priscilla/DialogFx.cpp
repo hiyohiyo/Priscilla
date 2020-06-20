@@ -153,15 +153,19 @@ void CDialogFx::UpdateDialogSize()
 	m_bDarkMode = SetDarkMode(m_hWnd);
 }
 
-void CDialogFx::SetClientSize(int sizeX, int sizeY)
+void CDialogFx::SetClientSize(int sizeX, int sizeY, double zoomRatio)
 {
 	RECT rw, rc;
 	GetWindowRect(&rw);
 	GetClientRect(&rc);
-	int ncaWidth = (rw.right - rw.left) - (rc.right - rc.left);
-	int ncaHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top);
 
-	SetWindowPos(NULL, 0, 0, sizeX + ncaWidth, sizeY + ncaHeight, SWP_NOMOVE | SWP_NOZORDER);
+	if (rc.right != 0)
+	{
+		int ncaWidth = (rw.right - rw.left) - (rc.right - rc.left);
+		int ncaHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top);
+
+		SetWindowPos(NULL, 0, 0, (int)(sizeX * zoomRatio) + ncaWidth, (int)(sizeY * zoomRatio) + ncaHeight, SWP_NOMOVE | SWP_NOZORDER);
+	}
 }
 
 void CDialogFx::UpdateBackground(BOOL resize, BOOL bDarkMode)
