@@ -165,7 +165,7 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	ShowWindow(SW_HIDE);
 
-	SetClientSize((int)(m_SizeX * m_ZoomRatio), (int)(m_SizeY * m_ZoomRatio), 1);
+	SetClientSize(m_SizeX, m_SizeY, m_ZoomRatio);
 	UpdateBackground(TRUE, FALSE);
 	SetControlFont();
 

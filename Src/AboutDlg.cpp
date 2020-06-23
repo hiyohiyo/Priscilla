@@ -78,7 +78,7 @@ void CAboutDlg::UpdateDialogSize()
 	CDialogFx::UpdateDialogSize();
 
 	ChangeZoomType(m_ZoomType);
-	SetClientSize((int)(SIZE_X * m_ZoomRatio), (int)(SIZE_Y * m_ZoomRatio), 0);
+	SetClientSize(SIZE_X, SIZE_Y, m_ZoomRatio);
 	UpdateBackground(TRUE, m_bDarkMode);
 
 	m_CtrlCrystalDewWorld.InitControl(12, 20, 128, 128, m_ZoomRatio, &m_BkDC, IP(L"Logo"), 1, BS_CENTER, OwnerDrawImage, FALSE, FALSE);
