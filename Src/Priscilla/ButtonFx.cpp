@@ -274,6 +274,12 @@ void CButtonFx::SetDrawFrame(BOOL bDrawFrame)
 	}
 }
 
+void CButtonFx::SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor)
+{
+	m_bDrawFrame = bDrawFrame;
+	m_FrameColor = frameColor;
+}
+
 void CButtonFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 {
 	m_GlassColor = glassColor;
@@ -414,6 +420,14 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 	pBkDC->DeleteDC();
 	delete pMemDC;
 	delete pBkDC;
+
+	if (m_bDrawFrame)
+	{
+		CBrush brush;
+		brush.CreateSolidBrush(m_FrameColor);
+		drawDC->FrameRect(&(lpDrawItemStruct->rcItem), &brush);
+		brush.DeleteObject();
+	}
 }
 
 void CButtonFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)

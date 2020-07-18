@@ -178,6 +178,7 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_Meter1.InitControl(88, 40, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
 	m_Combo1.InitControl(288, 40, 184, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
+	m_Edit1.SetDrawFrameEx(TRUE, m_Frame);
 	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_Edit1.Adjust();
 

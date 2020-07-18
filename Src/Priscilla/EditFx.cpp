@@ -214,6 +214,12 @@ void CEditFx::SetDrawFrame(BOOL bDrawFrame)
 	}
 }
 
+void CEditFx::SetDrawFrameEx(BOOL bDrawFrame, COLORREF frameColor)
+{
+	m_bDrawFrame = bDrawFrame;
+	m_FrameColor = frameColor;
+}
+
 void CEditFx::SetGlassColor(COLORREF glassColor, BYTE glassAlpha)
 {
 	m_GlassColor = glassColor;
@@ -375,6 +381,44 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 				CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
 				dn += (DstBmpInfo.bmBitsPixel / 8);
 				cn += (CtlBmpInfo.bmBitsPixel / 8);
+			}
+		}
+
+		if (m_bDrawFrame)
+		{
+			BYTE r, g, b;
+			r = GetRValue(m_FrameColor);
+			g = GetGValue(m_FrameColor);
+			b = GetBValue(m_FrameColor);
+			
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py += DstBmpInfo.bmHeight - 1)
+			{
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+				{
+					CtlBuffer[dn + 0] = b;
+					CtlBuffer[dn + 1] = g;
+					CtlBuffer[dn + 2] = r;
+					CtlBuffer[cn + 3] = 0;
+					dn += (DstBmpInfo.bmBitsPixel / 8);
+					cn += (CtlBmpInfo.bmBitsPixel / 8);
+				}
+			}
+
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+			{
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px += DstBmpInfo.bmWidth - 1)
+				{
+					CtlBuffer[dn + 0] = b;
+					CtlBuffer[dn + 1] = g;
+					CtlBuffer[dn + 2] = r;
+					CtlBuffer[cn + 3] = 0;
+					dn += (DstBmpInfo.bmBitsPixel / 8) * (DstBmpInfo.bmWidth - 1);
+					cn += (CtlBmpInfo.bmBitsPixel / 8) * (DstBmpInfo.bmWidth - 1);
+				}
 			}
 		}
 
