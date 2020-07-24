@@ -20,6 +20,7 @@ CButtonFx::CButtonFx()
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
+	m_bDrawFrame = FALSE;
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);

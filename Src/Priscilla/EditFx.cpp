@@ -19,6 +19,7 @@ CEditFx::CEditFx()
 	m_Y = 0;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
+	m_bDrawFrame = FALSE;
 	m_RenderMode = OwnerDrawImage;
 	m_Margin.top = 0;
 	m_Margin.left = 0;
