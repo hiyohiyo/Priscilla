@@ -124,6 +124,11 @@ BOOL CButtonFx::InitControl(int x, int y, int width, int height, double zoomRati
 			ModifyStyle(BS_OWNERDRAW, m_TextAlign);
 		}
 	}
+	else if (m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES) < 24)
+	{
+		m_ImageCount = 0;
+		m_CtrlImage.Destroy();
+	}
 	else if (renderMode & OwnerDrawGlass)
 	{
 		m_ImageCount = 3;
@@ -343,7 +348,10 @@ void CButtonFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24)
 	{
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+		if (!m_CtrlImage.IsNull())
+		{
+			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+		}
 		DrawString(drawDC, lpDrawItemStruct);
 	}
 	else // Full Color (24/32bit)
@@ -592,12 +600,12 @@ void CButtonFx::LoadCtrlBk(CDC* drawDC)
 // Font
 //------------------------------------------------
 
-void CButtonFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio, COLORREF textColor, LONG fontWeight)
+void CButtonFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio, COLORREF textColor, LONG fontWeight, BYTE fontRender)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
 	logFont.lfWeight = fontWeight;
 
 	if (face.GetLength() < 32)

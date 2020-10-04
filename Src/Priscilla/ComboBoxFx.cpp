@@ -48,6 +48,7 @@ CComboBoxFx::CComboBoxFx()
 	m_BkColorHc = RGB(0, 0, 0);
 	m_BkColorSelectedHc = RGB(0, 255, 255);
 	m_FontHeight = 16;
+	m_FontRender = CLEARTYPE_NATURAL_QUALITY;
 
 	// Mouse
 	m_bHover = FALSE;
@@ -168,6 +169,44 @@ BOOL CComboBoxFx::InitControl(int x, int y, int width, int height, double zoomRa
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
 				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = a;
+			}
+		}
+
+		m_CtrlBitmap.SetBitmapBits(length, bitmapBits);
+		delete[] bitmapBits;
+	}
+	else if (renderMode & OwnerDrawTransparent)
+	{
+		m_ImageCount = 1;
+		m_CtrlImage.Destroy();
+		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy * m_ImageCount, 32);
+
+		RECT rect;
+		rect.top = 0;
+		rect.left = 0;
+		rect.right = m_CtrlSize.cx;
+		rect.bottom = m_CtrlSize.cy;
+
+		m_CtrlBitmap.Detach();
+		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
+
+		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount * 4;
+		BYTE* bitmapBits = new BYTE[length];
+		m_CtrlBitmap.GetBitmapBits(length, bitmapBits);
+
+		BYTE r = (BYTE)GetRValue(m_GlassColor);
+		BYTE g = (BYTE)GetGValue(m_GlassColor);
+		BYTE b = (BYTE)GetBValue(m_GlassColor);
+		BYTE a = m_GlassAlpha;
+
+		for (int y = 0; y < (int)(m_CtrlSize.cy * m_ImageCount); y++)
+		{
+			for (int x = 0; x < m_CtrlSize.cx; x++)
+			{
+				// bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 0] = b;
+				// bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 1] = g;
+				// bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 2] = r;
+				bitmapBits[(y * m_CtrlSize.cx + x) * 4 + 3] = (BYTE)0;
 			}
 		}
 
@@ -558,13 +597,14 @@ void CComboBoxFx::LoadCtrlBk(CDC* drawDC)
 //------------------------------------------------
 
 void CComboBoxFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-     COLORREF textColor, COLORREF textColorSelected, LONG fontWeight)
+     COLORREF textColor, COLORREF textColorSelected, LONG fontWeight, BYTE fontRender)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
 	logFont.lfWeight = fontWeight;
+	m_FontRender = fontRender;
 
 	if (face.GetLength() < 32)
 	{

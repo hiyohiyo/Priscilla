@@ -64,10 +64,10 @@
 #elif _M_X64
 #define PRODUCT_EDITION				L"x64"
 #else
-#define PRODUCT_EDITION				L""
+#define PRODUCT_EDITION				L"x86"
 #endif
 
-#define PRODUCT_RELEASE				L"2020/07/24"
+#define PRODUCT_RELEASE				L"2020/10/03"
 #define PRODUCT_COPY_YEAR			L"2020"
 #define PRODUCT_COPYRIGHT			L"© 2020 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"

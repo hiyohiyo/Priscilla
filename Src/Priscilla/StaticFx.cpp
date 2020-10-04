@@ -128,6 +128,11 @@ BOOL CStaticFx::InitControl(int x, int y, int width, int height, double zoomRati
 			ModifyStyle(SS_OWNERDRAW, m_TextAlign);
 		}
 	}
+	else if (m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES) < 24)
+	{
+		m_ImageCount = 0;
+		m_CtrlImage.Destroy();
+	}
 	else if (renderMode & OwnerDrawGlass)
 	{
 		m_ImageCount = 1;
@@ -292,21 +297,36 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24) 
 	{
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy, SRCCOPY);
+		CBitmap DrawBmp;
+		DrawBmp.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+		CDC* pDrawBmpDC = new CDC;
+		CBitmap* pOldDrawBitmap;
+		pDrawBmpDC->CreateCompatibleDC(drawDC);
+		pOldDrawBitmap = pDrawBmpDC->SelectObject(&DrawBmp);
+
 		if (!m_CtrlImage.IsNull())
 		{
 			if (m_bMeter)
 			{
 				int meter = (int)(m_CtrlSize.cx * (m_MeterRatio));
-				drawDC->BitBlt(meter, 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, pMemDC, meter, m_CtrlSize.cy * 0, SRCCOPY);
-				drawDC->BitBlt(0, 0, meter, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * 1, SRCCOPY);
+				pDrawBmpDC->BitBlt(meter, 0, m_CtrlSize.cx - meter, m_CtrlSize.cy, pMemDC, meter, m_CtrlSize.cy * 0, SRCCOPY);
+				pDrawBmpDC->BitBlt(0, 0, meter, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * 1, SRCCOPY);
+				DrawString(pDrawBmpDC, lpDrawItemStruct);
+				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 			}
 			else
 			{
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+				DrawString(pDrawBmpDC, lpDrawItemStruct);
+				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 			}
 		}
-		DrawString(drawDC, lpDrawItemStruct);
+		else
+		{
+			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+			DrawString(pDrawBmpDC, lpDrawItemStruct);
+			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+		}
 	}
 	else // Full Color (24/32bit)
 	{
@@ -413,18 +433,9 @@ void CStaticFx::DrawControl(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct, CBit
 		}
 		else
 		{
-			if (m_bMeter)
-			{
-				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
-				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
-			}
-			else
-			{
-				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy* no, SRCCOPY);
-				DrawString(pDrawBmpDC, lpDrawItemStruct);
-				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
-			}
+			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy* no, SRCCOPY);
+			DrawString(pDrawBmpDC, lpDrawItemStruct);
+			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
 		}
 
 		// Clean up
@@ -607,12 +618,12 @@ void CStaticFx::LoadCtrlBk(CDC* drawDC)
 //------------------------------------------------
 
 void CStaticFx::SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio,
-     COLORREF textColor, LONG fontWeight)
+     COLORREF textColor, LONG fontWeight, BYTE fontRender)
 {
 	LOGFONT logFont = { 0 };
 	logFont.lfCharSet = DEFAULT_CHARSET;
 	logFont.lfHeight = (LONG)(-1 * size * zoomRatio * fontRatio);
-	logFont.lfQuality = 6;
+	logFont.lfQuality = fontRender;
 	logFont.lfWeight = fontWeight;
 	if (face.GetLength() < 32)
 	{

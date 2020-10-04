@@ -20,12 +20,14 @@
 #define IDC_COPYRIGHT                   1108
 #define IDC_LICENSE                     1109
 #define IDC_EDITION                     1110
-#define ID_OK                           1200
-#define IDC_FONT_FACE_COMBO             1201
-#define IDC_FONT_SCALE_COMBO            1203
-#define IDC_FONT_FACE                   1204
-#define IDC_FONT_SCALE                  1205
-#define IDC_SET_DEFAULT                 1206
+#define IDC_OK                          1200
+#define IDC_FONT_FACE_COMBO		        1201
+#define IDC_FONT_SCALE_COMBO			1202
+#define IDC_FONT_RENDER_COMBO	        1203
+#define IDC_FONT_FACE					1204
+#define IDC_FONT_SCALE					1205
+#define IDC_FONT_RENDER     			1206	
+
 #define IDC_BUTTON1                     1300
 #define IDC_EDIT1                       1301
 #define IDC_LIST1                       1302
@@ -33,6 +35,8 @@
 #define IDC_STATIC1                     1304
 #define IDC_METER1                      1305
 #define IDC_BUTTON2                     1306
+#define IDC_SET_DEFAULT					1307
+
 #define ID_FILE_EXIT                    32771
 #define ID_FILE_SAVE_IMAGE              32772
 #define ID_ZOOM_100                     32800
