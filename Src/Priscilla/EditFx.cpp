@@ -394,7 +394,90 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 	int color = m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES);
 	if (color < 24)
 	{
-		
+		CBitmap* bk32Bitmap;
+		CImage bk32Image;
+		bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+		::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BkDC, m_X, m_Y, SRCCOPY);
+		bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
+
+		BITMAP CtlBmpInfo, DstBmpInfo;
+		bk32Bitmap->GetBitmap(&DstBmpInfo);
+		DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
+		DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
+		ctrlBitmap.GetBitmap(&CtlBmpInfo);
+		DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
+		DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+
+		if (DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes
+			|| DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight) {
+			return;
+		}
+
+		BYTE* DstBuffer = new BYTE[DstMemSize];
+		bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+		BYTE* CtlBuffer = new BYTE[CtlMemSize];
+		ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+		int baseY = 0;
+		for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+		{
+			int dn = py * DstLineBytes;
+			int cn = (baseY + py) * CtlLineBytes;
+			for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+			{
+				BYTE a = CtlBuffer[cn + 3];
+				BYTE na = 255 - a;
+				CtlBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+				CtlBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+				CtlBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+				dn += (DstBmpInfo.bmBitsPixel / 8);
+				cn += (CtlBmpInfo.bmBitsPixel / 8);
+			}
+		}
+
+		if (m_bDrawFrame)
+		{
+			BYTE r, g, b;
+			r = GetRValue(m_FrameColor);
+			g = GetGValue(m_FrameColor);
+			b = GetBValue(m_FrameColor);
+
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py += DstBmpInfo.bmHeight - 1)
+			{
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+				{
+					CtlBuffer[dn + 0] = b;
+					CtlBuffer[dn + 1] = g;
+					CtlBuffer[dn + 2] = r;
+					CtlBuffer[cn + 3] = 0;
+					dn += (DstBmpInfo.bmBitsPixel / 8);
+					cn += (CtlBmpInfo.bmBitsPixel / 8);
+				}
+			}
+
+			for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+			{
+				int dn = py * DstLineBytes;
+				int cn = (baseY + py) * CtlLineBytes;
+				for (LONG px = 0; px < DstBmpInfo.bmWidth; px += DstBmpInfo.bmWidth - 1)
+				{
+					CtlBuffer[dn + 0] = b;
+					CtlBuffer[dn + 1] = g;
+					CtlBuffer[dn + 2] = r;
+					CtlBuffer[cn + 3] = 0;
+					dn += (DstBmpInfo.bmBitsPixel / 8) * (DstBmpInfo.bmWidth - 1);
+					cn += (CtlBmpInfo.bmBitsPixel / 8) * (DstBmpInfo.bmWidth - 1);
+				}
+			}
+		}
+
+		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
+
+		bk32Image.ReleaseDC();
+		delete[] DstBuffer;
+		delete[] CtlBuffer;
 	}
 	else if (color >= 24)
 	{

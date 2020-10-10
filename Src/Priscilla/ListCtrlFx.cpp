@@ -138,7 +138,7 @@ BOOL CListCtrlFx::InitControl(int x, int y, int width, int height, int maxWidth,
 
 void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 {
-	if (m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES) >= 24)
+//	if (m_BkDC->GetDeviceCaps(BITSPIXEL) * m_BkDC->GetDeviceCaps(PLANES) >= 24)
 	{
 		BITMAP CtlBmpInfo, DstBmpInfo;
 		bkBitmap.GetBitmap(&DstBmpInfo);
@@ -148,13 +148,19 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;
 		DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
 
+		CBitmap* bk32Bitmap;
+		CImage bk32Image;
+		bk32Image.Create(DstBmpInfo.bmWidth, DstBmpInfo.bmHeight, 32);
+		::BitBlt(bk32Image.GetDC(), 0, 0, DstBmpInfo.bmWidth, DstBmpInfo.bmHeight, *m_BkDC, m_X, m_Y, SRCCOPY);
+		bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
+
 		if (DstBmpInfo.bmWidthBytes != CtlBmpInfo.bmWidthBytes
 			|| DstBmpInfo.bmHeight != CtlBmpInfo.bmHeight) {
 			return;
 		}
 
 		BYTE* DstBuffer = new BYTE[DstMemSize];
-		bkBitmap.GetBitmapBits(DstMemSize, DstBuffer);
+		bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
 		BYTE* CtlBuffer = new BYTE[CtlMemSize];
 		ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
 
@@ -177,6 +183,7 @@ void CListCtrlFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 
 		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
 
+		bk32Image.ReleaseDC();
 		delete[] DstBuffer;
 		delete[] CtlBuffer;
 	}

@@ -400,7 +400,75 @@ void CComboBoxFx::DrawControl(CString title, CDC* drawDC, LPDRAWITEMSTRUCT lpDra
 
 	if (drawDC->GetDeviceCaps(BITSPIXEL) * drawDC->GetDeviceCaps(PLANES) < 24)
 	{
-		drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+		CBitmap DrawBmp;
+		DrawBmp.CreateCompatibleBitmap(drawDC, m_CtrlSize.cx, m_CtrlSize.cy);
+		CDC* pDrawBmpDC = new CDC;
+		CBitmap* pOldDrawBitmap;
+		pDrawBmpDC->CreateCompatibleDC(drawDC);
+		pOldDrawBitmap = pDrawBmpDC->SelectObject(&DrawBmp);
+
+		if (!m_CtrlImage.IsNull())
+		{
+			if (m_CtrlImage.GetBPP() == 32)
+			{
+				CBitmap* bk32Bitmap;
+				CImage bk32Image;
+				bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
+				::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *pBkDC, 0, 0, SRCCOPY);
+				bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
+
+				BITMAP CtlBmpInfo, DstBmpInfo;
+				bk32Bitmap->GetBitmap(&DstBmpInfo);
+				DWORD DstLineBytes = DstBmpInfo.bmWidthBytes;
+				DWORD DstMemSize = DstLineBytes * DstBmpInfo.bmHeight;
+				ctrlBitmap.GetBitmap(&CtlBmpInfo);
+				DWORD CtlLineBytes = CtlBmpInfo.bmWidthBytes;;
+				DWORD CtlMemSize = CtlLineBytes * CtlBmpInfo.bmHeight;
+
+				BYTE* DstBuffer = new BYTE[DstMemSize];
+				bk32Bitmap->GetBitmapBits(DstMemSize, DstBuffer);
+				BYTE* CtlBuffer = new BYTE[CtlMemSize];
+				ctrlBitmap.GetBitmapBits(CtlMemSize, CtlBuffer);
+
+				int baseY = m_CtrlSize.cy * no;
+				for (LONG py = 0; py < DstBmpInfo.bmHeight; py++)
+				{
+					int dn = py * DstLineBytes;
+					int cn = (baseY + py) * CtlLineBytes;
+					for (LONG px = 0; px < DstBmpInfo.bmWidth; px++)
+					{
+						BYTE a = CtlBuffer[cn + 3];
+						BYTE na = 255 - a;
+						DstBuffer[dn + 0] = (BYTE)((CtlBuffer[cn + 0] * a + DstBuffer[dn + 0] * na) / 255);
+						DstBuffer[dn + 1] = (BYTE)((CtlBuffer[cn + 1] * a + DstBuffer[dn + 1] * na) / 255);
+						DstBuffer[dn + 2] = (BYTE)((CtlBuffer[cn + 2] * a + DstBuffer[dn + 2] * na) / 255);
+						dn += (DstBmpInfo.bmBitsPixel / 8);
+						cn += (CtlBmpInfo.bmBitsPixel / 8);
+					}
+				}
+				bk32Bitmap->SetBitmapBits(DstMemSize, DstBuffer);
+				::BitBlt(pDrawBmpDC->GetSafeHdc(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
+				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+
+				bk32Image.ReleaseDC();
+				delete[] DstBuffer;
+				delete[] CtlBuffer;
+			}
+			else
+			{
+				pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pMemDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+				drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+			}
+		}
+		else
+		{
+			pDrawBmpDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pBkDC, 0, m_CtrlSize.cy * no, SRCCOPY);
+			drawDC->BitBlt(0, 0, m_CtrlSize.cx, m_CtrlSize.cy, pDrawBmpDC, 0, 0, SRCCOPY);
+		}
+
+		pDrawBmpDC->SelectObject(&pOldDrawBitmap);
+		pDrawBmpDC->DeleteDC();
+		delete pDrawBmpDC;
 	}
 	else // Full Color (24/32bit)
 	{
