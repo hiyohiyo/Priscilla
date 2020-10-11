@@ -113,9 +113,9 @@ BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio,
 	else
 	{
 		m_ImageCount = 1;
-		m_CtrlBitmap.Detach();
 		m_CtrlImage.Destroy();
 		m_CtrlImage.Create(m_CtrlSize.cx, m_CtrlSize.cy * m_ImageCount, 32);
+		m_CtrlBitmap.Detach();
 		m_CtrlBitmap.Attach((HBITMAP)m_CtrlImage);
 		DWORD length = m_CtrlSize.cx * m_CtrlSize.cy * m_ImageCount * 4;
 		BYTE* bitmapBits = new BYTE[length];
@@ -328,12 +328,12 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 
 	CBitmap* bk32Bitmap;
 	CImage bk32Image;
-	if (color == 16)
+	if (color == 32)
 	{
 		bk32Bitmap = &bkBitmap;
 	}
 	else
-	{
+	{	
 		bk32Image.Create(m_CtrlSize.cx, m_CtrlSize.cy, 32);
 		::BitBlt(bk32Image.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, *m_BkDC, m_X, m_Y, SRCCOPY);
 		bk32Bitmap = CBitmap::FromHandle((HBITMAP)bk32Image);
@@ -369,18 +369,20 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		}
 	}
 
-	if (color == 16)
+	if (color == 32)
 	{
 		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
 	}
 	else
 	{
 		bk32Bitmap->SetBitmapBits(CtlMemSize, CtlBuffer);
-	//	m_CtrlImage.Detach();
-	//	m_CtrlImage.Attach(ctrlBitmap);
+		m_CtrlImage.Detach();
+		m_CtrlImage.Attach(ctrlBitmap);
 		::BitBlt(m_CtrlImage.GetDC(), 0, 0, m_CtrlSize.cx, m_CtrlSize.cy, bk32Image.GetDC(), 0, 0, SRCCOPY);
 		m_CtrlImage.ReleaseDC();
 		bk32Image.ReleaseDC();
+
+		ctrlBitmap.SetBitmapBits(CtlMemSize, CtlBuffer);
 	}
 
 	if (m_bDrawFrame)
@@ -394,6 +396,8 @@ void CEditFx::SetupControlImage(CBitmap& bkBitmap, CBitmap& ctrlBitmap)
 		rect.bottom = m_CtrlSize.cy;
 		::FrameRect(m_CtrlImage.GetDC(), &rect, (HBRUSH)brush.GetSafeHandle());
 		brush.DeleteObject();
+
+		m_CtrlImage.ReleaseDC();
 	}
 
 	delete[] DstBuffer;
