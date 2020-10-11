@@ -29,13 +29,19 @@
 #define IDC_FONT_RENDER     			1206	
 
 #define IDC_BUTTON1                     1300
-#define IDC_EDIT1                       1301
-#define IDC_LIST1                       1302
-#define IDC_COMBO1                      1303
+#define IDC_BUTTON2                     1301
+#define IDC_BUTTON3                     1302
+#define IDC_BUTTON4                     1303
+
 #define IDC_STATIC1                     1304
-#define IDC_METER1                      1305
-#define IDC_BUTTON2                     1306
-#define IDC_SET_DEFAULT					1307
+#define IDC_STATIC2                     1305
+#define IDC_STATIC3                     1306
+#define IDC_METER1                      1307
+
+#define IDC_EDIT1                       1310
+#define IDC_LIST1                       1311
+#define IDC_COMBO1                      1312
+#define IDC_SET_DEFAULT					1313
 
 #define ID_FILE_EXIT                    32771
 #define ID_FILE_SAVE_IMAGE              32772

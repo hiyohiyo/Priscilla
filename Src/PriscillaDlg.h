@@ -83,12 +83,18 @@ protected:
 
 	CButtonFx m_Button1;
 	CButtonFx m_Button2;
+	CButtonFx m_Button3;
+	CButtonFx m_Button4;
+
 	CComboBoxFx m_Combo1;
 	CEditFx m_Edit1;
 	CStaticFx m_Static1;
+	CStaticFx m_Static2;
 	CStaticFx m_Meter1;
 	CListCtrlFx m_List1;
 public:
 	afx_msg void OnButton1();
 	afx_msg void OnButton2();
+	afx_msg void OnButton3();
+	afx_msg void OnButton4();
 };
