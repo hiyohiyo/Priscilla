@@ -273,17 +273,17 @@ void CPriscillaDlg::SetControlFont()
 	////
 	//// Set Control's Font
 	////
-	m_Static1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
-	m_Static2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
-	m_Button1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
-	m_Button2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
-	m_Button3.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
-	m_Button4.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD);
+	m_Static1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD, m_FontRender);
+	m_Static2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD, m_FontRender);
+	m_Button1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
+	m_Button2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
+	m_Button3.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
+	m_Button4.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
 
-	m_Meter1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD);
-	m_Combo1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ComboText, m_ComboTextSelected, FW_NORMAL);
-	m_Edit1.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD);
-	m_List1.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio);
+	m_Meter1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD, m_FontRender);
+	m_Combo1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ComboText, m_ComboTextSelected, FW_NORMAL, m_FontRender);
+	m_Edit1.SetFontEx(m_FontFace, 24, 24, m_ZoomRatio, m_FontRatio, m_EditText, FW_BOLD, m_FontRender);
+	m_List1.SetFontEx(m_FontFace, 12, m_ZoomRatio, m_FontRatio, FW_NORMAL, m_FontRender);
 
 	m_Combo1.SetFontHeight(24, m_ZoomRatio, m_FontRatio);
 	m_Combo1.SetItemHeightEx(-1, 24, m_ZoomRatio, m_FontRatio);
@@ -603,11 +603,14 @@ void CPriscillaDlg::OnFontSetting()
 		m_FontFace = fontSelection.GetFontFace();
 		m_FontScale = fontSelection.GetFontScale();
 		m_FontRatio = m_FontScale / 100.0;
+		m_FontRender = fontSelection.GetFontRender();
 
 		CString cstr;
 		WritePrivateProfileString(L"Setting", L"FontFace", L"\"" + m_FontFace + L"\"", m_Ini);
 		cstr.Format(L"%d", m_FontScale);
 		WritePrivateProfileString(L"Setting", L"FontScale", cstr, m_Ini);
+		cstr.Format(L"%d", m_FontRender);
+		WritePrivateProfileString(L"Setting", L"FontRender", cstr, m_Ini);
 
 		UpdateDialogSize();
 	}

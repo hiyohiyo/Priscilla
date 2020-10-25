@@ -125,9 +125,9 @@ void CFontSelectionDlg::UpdateDialogSize()
 	m_CtrlFontScale.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_CtrlFontRender.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
-	m_LabelFontFace.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
-	m_LabelFontScale.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
-	m_LabelFontRender.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, m_LabelText, FW_NORMAL, m_FontRender);
+	m_LabelFontFace.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_LabelFontScale.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
+	m_LabelFontRender.SetFontEx(m_FontFace, 16, 16, m_ZoomRatio, m_FontRatio, RGB(0, 0, 0), FW_NORMAL, m_FontRender);
 
 	m_CtrlFontFace.SetFontHeight(20, m_ZoomRatio, m_FontRatio);
 	m_CtrlFontFace.SetFontEx(m_FontFace, 20, 20, m_ZoomRatio, m_FontRatio, textColor, textSelectedColor, FW_NORMAL, m_FontRender);
