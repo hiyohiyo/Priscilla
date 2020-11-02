@@ -28,7 +28,7 @@ public:
 
 	enum { IDD = IDD_MAIN };
 
-	static const int SIZE_X = 480;
+	static const int SIZE_X = 488;
 	static const int SIZE_Y = 300;
 	static const int SIZE_MIN_Y = 300;
 	static const int OFFSET_X = 0;
@@ -70,6 +70,7 @@ protected:
 	afx_msg void OnFontSetting();
 	afx_msg void OnHelp();
 	afx_msg void OnCrystalDewWorld();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 
 	HICON m_hIcon;
 	HICON m_hIconMini;
@@ -90,6 +91,7 @@ protected:
 	CEditFx m_Edit1;
 	CStaticFx m_Static1;
 	CStaticFx m_Static2;
+	CStaticFx m_Static3;
 	CStaticFx m_Meter1;
 	CListCtrlFx m_List1;
 public:

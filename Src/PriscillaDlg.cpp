@@ -50,6 +50,7 @@ void CPriscillaDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT1, m_Edit1);
 	DDX_Control(pDX, IDC_STATIC1, m_Static1);
 	DDX_Control(pDX, IDC_STATIC2, m_Static2);
+	DDX_Control(pDX, IDC_STATIC3, m_Static3);
 	DDX_Control(pDX, IDC_METER1, m_Meter1);
 	DDX_Control(pDX, IDC_LIST1, m_List1);
 }
@@ -69,6 +70,7 @@ BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
 	ON_COMMAND(ID_HELP, &CPriscillaDlg::OnHelp)
 	ON_COMMAND(ID_HELP_CRYSTALDEWWORLD, &CPriscillaDlg::OnCrystalDewWorld)
 	ON_COMMAND(ID_FONT_SETTING, &CPriscillaDlg::OnFontSetting)
+	ON_WM_LBUTTONDOWN()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON1, &CPriscillaDlg::OnButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CPriscillaDlg::OnButton2)
@@ -141,8 +143,9 @@ BOOL CPriscillaDlg::OnInitDialog()
 	m_bShowWindow = TRUE;
 
 	//// Init Controls
-	m_Static1.SetWindowTextW(L"Project");
-	m_Static2.SetWindowTextW(L"Priscilla");
+	m_Static1.SetWindowTextW(L"Static1");
+	m_Static2.SetWindowTextW(L"Static2");
+	m_Static3.SetWindowTextW(L"Static3");
 	m_Meter1.SetMeter(TRUE, 0.5);
 	m_Meter1.SetWindowTextW(L"50%");
 
@@ -180,24 +183,27 @@ void CPriscillaDlg::UpdateDialogSize()
 	////
 	//// InitControl
 	////
-	m_Static2.SetGlassColor(m_Glass, m_GlassAlpha);
+	m_Static3.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_Static1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_Static2.SetMargin(0, 4, 0, 0, m_ZoomRatio);
-	m_Static1.InitControl(8, 8, 96, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawTransparent, m_bHighContrast, FALSE);
-	m_Static2.InitControl(112, 8, 96, 24, m_ZoomRatio, &m_BkDC, NULL, 0, SS_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
+	m_Static3.SetMargin(0, 4, 0, 0, m_ZoomRatio);
+	m_Static1.InitControl(248, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, SS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
+	m_Static2.InitControl(328, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
+	m_Static3.InitControl(408, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass, m_bHighContrast, FALSE);
 
 	m_Button3.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
 	m_Button2.InitControl(88, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
 	m_Button3.InitControl(168, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawGlass, m_bHighContrast, FALSE);
-	m_Button4.InitControl(400, 8, 72, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, FALSE);
 
-	m_Meter1.InitControl(280, 40, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
-	m_Combo1.InitControl(208, 8, 184, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
+	m_Button4.InitControl(408, 8, 72, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, FALSE);
+
+	m_Meter1.InitControl(288, 100, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
+	m_Combo1.InitControl(8, 8, 392, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_Edit1.SetDrawFrameEx(TRUE, m_Frame);
 	m_Edit1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
-	m_Edit1.InitControl(8, 100, 464, 40, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
+	m_Edit1.InitControl(8, 100, 272, 48, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
 	m_Edit1.Adjust();
 
 	m_List1.SetTextColor1(m_ListText1);
@@ -210,11 +216,11 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	if (rand() % 2)
 	{
-		m_List1.InitControl(8, 148, 464, 72, 464, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
+		m_List1.InitControl(8, 156, 472, 72, 472, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
 	}
 	else
 	{
-		m_List1.InitControl(8, 148, 464, 144, 464, 144, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
+		m_List1.InitControl(8, 156, 472, 136, 472, 136, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
 	}
 
 	m_Button1.SetHandCursor();
@@ -225,6 +231,9 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_Button2.SetDrawFrameEx(TRUE, m_Frame);
 	m_Button3.SetDrawFrameEx(TRUE, m_Frame);
 
+	m_Static2.SetDrawFrameEx(TRUE, m_Frame);
+	m_Static3.SetDrawFrameEx(TRUE, m_Frame);
+
 	m_Combo1.SetCurSel(0);
 	m_Combo1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 
@@ -234,11 +243,11 @@ void CPriscillaDlg::UpdateDialogSize()
 	int width = 0;
 	if (pGetSystemMetricsForDpi != NULL)
 	{
-		width = (int)((464 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))) - 4);
+		width = (int)((472 * m_ZoomRatio - (pGetSystemMetricsForDpi(SM_CXVSCROLL, pGetDpiForWindow(m_hWnd)))) - 4);
 	}
 	else
 	{
-		width = (int)(464 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL) - 4);
+		width = (int)(472 * m_ZoomRatio - GetSystemMetrics(SM_CXVSCROLL) - 4);
 	}
 
 	m_List1.DeleteAllItems();
@@ -275,6 +284,7 @@ void CPriscillaDlg::SetControlFont()
 	////
 	m_Static1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD, m_FontRender);
 	m_Static2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD, m_FontRender);
+	m_Static3.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_LabelText, FW_BOLD, m_FontRender);
 	m_Button1.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
 	m_Button2.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
 	m_Button3.SetFontEx(m_FontFace, 16, 24, m_ZoomRatio, m_FontRatio, m_ButtonText, FW_BOLD, m_FontRender);
@@ -679,3 +689,10 @@ void CPriscillaDlg::OnButton4()
 	}
 }
 
+void CPriscillaDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// Move Focus to Hide Control
+	GetDlgItem(IDC_HIDE)->SetFocus();
+
+	CMainDialogFx::OnLButtonDown(nFlags, point);
+}

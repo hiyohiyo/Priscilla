@@ -26,7 +26,8 @@
 #define IDC_FONT_RENDER_COMBO	        1203
 #define IDC_FONT_FACE					1204
 #define IDC_FONT_SCALE					1205
-#define IDC_FONT_RENDER     			1206	
+#define IDC_FONT_RENDER     			1206
+#define IDC_HIDE                        1207
 
 #define IDC_BUTTON1                     1300
 #define IDC_BUTTON2                     1301
