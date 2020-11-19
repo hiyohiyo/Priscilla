@@ -1,6 +1,6 @@
 # Priscilla
 
-Priscilla is my customized MFC dialog base control library.
+Priscilla is MFC dialog base control library.
 
 # License
 
