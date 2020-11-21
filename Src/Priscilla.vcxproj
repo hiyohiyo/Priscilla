@@ -443,6 +443,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Priscilla\ScrollBarFx.cpp" />
+    <ClCompile Include="Priscilla\SliderCtrlFx.cpp" />
     <ClCompile Include="Priscilla\StaticFx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">../stdafx.h</PrecompiledHeaderFile>
@@ -480,6 +482,8 @@
     <ClInclude Include="Priscilla\HeaderCtrlFx.h" />
     <ClInclude Include="Priscilla\ListCtrlFx.h" />
     <ClInclude Include="Priscilla\MainDialogFx.h" />
+    <ClInclude Include="Priscilla\ScrollBarFx.h" />
+    <ClInclude Include="Priscilla\SliderCtrlFx.h" />
     <ClInclude Include="Priscilla\StaticFx.h" />
     <ClInclude Include="Priscilla\UtilityFx.h" />
     <ClInclude Include="Resource.h" />

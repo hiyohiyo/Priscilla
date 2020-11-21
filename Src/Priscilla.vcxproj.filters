@@ -69,6 +69,12 @@
     <ClCompile Include="Priscilla\DarkMode.cpp">
       <Filter>Priscilla</Filter>
     </ClCompile>
+    <ClCompile Include="Priscilla\SliderCtrlFx.cpp">
+      <Filter>Priscilla</Filter>
+    </ClCompile>
+    <ClCompile Include="Priscilla\ScrollBarFx.cpp">
+      <Filter>Priscilla</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDlg.h">
@@ -129,6 +135,12 @@
       <Filter>Priscilla</Filter>
     </ClInclude>
     <ClInclude Include="Priscilla\IatHook.h">
+      <Filter>Priscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\SliderCtrlFx.h">
+      <Filter>Priscilla</Filter>
+    </ClInclude>
+    <ClInclude Include="Priscilla\ScrollBarFx.h">
       <Filter>Priscilla</Filter>
     </ClInclude>
   </ItemGroup>

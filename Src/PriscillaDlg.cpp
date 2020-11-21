@@ -53,6 +53,8 @@ void CPriscillaDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC3, m_Static3);
 	DDX_Control(pDX, IDC_METER1, m_Meter1);
 	DDX_Control(pDX, IDC_LIST1, m_List1);
+	DDX_Control(pDX, IDC_SLIDER1, m_Slider1);
+	DDX_Control(pDX, IDC_SCROLLBAR1, m_Scrollbar1);
 }
 
 BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
@@ -71,12 +73,12 @@ BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
 	ON_COMMAND(ID_HELP_CRYSTALDEWWORLD, &CPriscillaDlg::OnCrystalDewWorld)
 	ON_COMMAND(ID_FONT_SETTING, &CPriscillaDlg::OnFontSetting)
 	ON_WM_LBUTTONDOWN()
+	ON_WM_CTLCOLOR()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON1, &CPriscillaDlg::OnButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CPriscillaDlg::OnButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CPriscillaDlg::OnButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CPriscillaDlg::OnButton4)
-
 END_MESSAGE_MAP()
 
 LRESULT CPriscillaDlg::OnQueryEndSession(WPARAM wParam, LPARAM lParam)
@@ -200,6 +202,10 @@ void CPriscillaDlg::UpdateDialogSize()
 
 	m_Meter1.InitControl(288, 100, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
 	m_Combo1.InitControl(8, 8, 392, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
+
+	m_Slider1.InitControl(8, 156, 232, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, 50);
+	m_Scrollbar1.InitControl(248, 156, 232, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, 50);
+
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
 	m_Edit1.SetDrawFrameEx(TRUE, m_Frame);
 	m_Edit1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
@@ -213,15 +219,7 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_List1.SetLineColor1(m_ListLine1);
 	m_List1.SetLineColor2(m_ListLine2);
 	m_List1.SetGlassColor(m_Glass, m_GlassAlpha);
-
-	if (rand() % 2)
-	{
-		m_List1.InitControl(8, 156, 472, 72, 472, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
-	}
-	else
-	{
-		m_List1.InitControl(8, 156, 472, 136, 472, 136, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
-	}
+	m_List1.InitControl(8, 188, 472, 104, 472, 72, m_ZoomRatio, &m_BkDC, OwnerDrawGlass, m_bHighContrast, m_bDarkMode);
 
 	m_Button1.SetHandCursor();
 	m_Button2.SetHandCursor();
@@ -680,13 +678,22 @@ void CPriscillaDlg::OnButton4()
 	if (bDarkMode)
 	{
 		SetDarkModeControl(m_Button4.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_Scrollbar1.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_Slider1.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_Combo1.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_List1.GetSafeHwnd(), bDarkMode);
 		bDarkMode = FALSE;
 	}
 	else
 	{
 		SetDarkModeControl(m_Button4.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_Scrollbar1.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_Slider1.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_Combo1.GetSafeHwnd(), bDarkMode);
+		SetDarkModeControl(m_List1.GetSafeHwnd(), bDarkMode);
 		bDarkMode = TRUE;
 	}
+	Invalidate();
 }
 
 void CPriscillaDlg::OnLButtonDown(UINT nFlags, CPoint point)
@@ -695,4 +702,26 @@ void CPriscillaDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	GetDlgItem(IDC_HIDE)->SetFocus();
 
 	CMainDialogFx::OnLButtonDown(nFlags, point);
+}
+
+HBRUSH CPriscillaDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialogFx::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	switch (nCtlColor)
+	{
+	case CTLCOLOR_STATIC:
+		if (pWnd->m_hWnd == m_Slider1.m_hWnd && ! m_Slider1.m_bHighContrast)
+		{
+			pDC->SetBkMode(TRANSPARENT);
+			return m_Slider1.m_BkBrush;
+		}
+		if (pWnd->m_hWnd == m_Scrollbar1.m_hWnd && !m_Scrollbar1.m_bHighContrast)
+		{
+			pDC->SetBkMode(TRANSPARENT);
+			return m_Scrollbar1.m_BkBrush;
+		}
+	default:
+		return hbr;
+	}
 }

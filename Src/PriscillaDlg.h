@@ -17,6 +17,8 @@
 #include "EditFx.h"
 #include "ComboBoxFx.h"
 #include "ListCtrlFx.h"
+#include "SliderCtrlFx.h"
+#include "ScrollBarFx.h"
 #include "UtilityFx.h"
 #include "OsInfoFx.h"
 
@@ -71,6 +73,7 @@ protected:
 	afx_msg void OnHelp();
 	afx_msg void OnCrystalDewWorld();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
 	HICON m_hIcon;
 	HICON m_hIconMini;
@@ -94,6 +97,9 @@ protected:
 	CStaticFx m_Static3;
 	CStaticFx m_Meter1;
 	CListCtrlFx m_List1;
+	CSliderCtrlFx m_Slider1;
+	CScrollBarFx m_Scrollbar1;
+
 public:
 	afx_msg void OnButton1();
 	afx_msg void OnButton2();

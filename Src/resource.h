@@ -43,6 +43,8 @@
 #define IDC_LIST1                       1311
 #define IDC_COMBO1                      1312
 #define IDC_SET_DEFAULT					1313
+#define IDC_SLIDER1                     1314
+#define IDC_SCROLLBAR1                  1315
 
 #define ID_FILE_EXIT                    32771
 #define ID_FILE_SAVE_IMAGE              32772
