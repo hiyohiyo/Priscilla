@@ -27,6 +27,7 @@ CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
 	m_CurrentTheme = p->GetCurrentTheme();
 	m_DefaultTheme = p->GetDefaultTheme();
 	m_Ini = p->GetIniPath();
+	m_bDisableDarkMode = p->IsDisableDarkMode();
 
 	m_BackgroundName = L"About";
 }

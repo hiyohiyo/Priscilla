@@ -66,6 +66,7 @@ protected:
 	afx_msg void OnZoom250();
 	afx_msg void OnZoom300();
 	afx_msg void OnZoomAuto();
+	afx_msg void OnDisableDarkMode();
 	afx_msg void OnExit();
 	afx_msg void OnSaveImage();
 	afx_msg void OnAbout();

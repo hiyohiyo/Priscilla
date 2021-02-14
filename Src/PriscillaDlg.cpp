@@ -69,6 +69,8 @@ BEGIN_MESSAGE_MAP(CPriscillaDlg, CMainDialogFx)
 	ON_COMMAND(ID_ZOOM_250, &CPriscillaDlg::OnZoom250)
 	ON_COMMAND(ID_ZOOM_300, &CPriscillaDlg::OnZoom300)
 	ON_COMMAND(ID_ZOOM_AUTO, &CPriscillaDlg::OnZoomAuto)
+	ON_COMMAND(ID_DISABLE_DARK_MODE, &CPriscillaDlg::OnDisableDarkMode)
+
 	ON_COMMAND(ID_HELP, &CPriscillaDlg::OnHelp)
 	ON_COMMAND(ID_HELP_CRYSTALDEWWORLD, &CPriscillaDlg::OnCrystalDewWorld)
 	ON_COMMAND(ID_FONT_SETTING, &CPriscillaDlg::OnFontSetting)
@@ -116,6 +118,12 @@ BOOL CPriscillaDlg::OnInitDialog()
 	else
 	{
 		m_FontRatio = m_FontScale / 100.0;
+	}
+
+	m_bDisableDarkMode = GetPrivateProfileInt(L"Setting", L"DisableDarkMode", 0, m_Ini);
+	if (m_bDisableDarkMode != 1)
+	{
+		m_bDisableDarkMode = 0;
 	}
 
 	InitThemeLang();
@@ -435,6 +443,18 @@ void CPriscillaDlg::ChangeLang(CString LangName)
 	cstr = i18n(L"Menu", L"FONT_SETTING") + L"\tCtrl + F";
 	menu->ModifyMenu(ID_FONT_SETTING, MF_STRING, ID_FONT_SETTING, cstr);
 
+	cstr = i18n(L"Menu", L"DISABLE_DARK_MODE");
+	menu->ModifyMenu(ID_DISABLE_DARK_MODE, MF_STRING, ID_DISABLE_DARK_MODE, cstr);
+
+	if (m_bDisableDarkMode)
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
+	}
+	else
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_UNCHECKED);
+	}
+
 	CheckRadioZoomType();
 
 	SetMenu(menu);
@@ -577,6 +597,27 @@ void CPriscillaDlg::CheckRadioZoomType()
 	menu->CheckMenuRadioItem(ID_ZOOM_100, ID_ZOOM_AUTO, id, MF_BYCOMMAND);
 	SetMenu(menu);
 	DrawMenuBar();
+}
+
+void CPriscillaDlg::OnDisableDarkMode()
+{
+	CMenu* menu = GetMenu();
+	if (menu->GetMenuState(ID_DISABLE_DARK_MODE, MF_BYCOMMAND) & MFS_CHECKED)
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_UNCHECKED);
+		m_bDisableDarkMode = FALSE;
+		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("0"), m_Ini);
+	}
+	else
+	{
+		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
+		m_bDisableDarkMode = TRUE;
+		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("1"), m_Ini);
+	}
+	SetMenu(menu);
+	DrawMenuBar();
+
+	UpdateDialogSize();
 }
 
 void CPriscillaDlg::OnHelp()

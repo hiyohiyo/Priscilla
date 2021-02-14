@@ -132,8 +132,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,2020
- PRODUCTVERSION 1,0,0,2020
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -150,13 +150,13 @@ BEGIN
         BEGIN
             VALUE "Comments", "https://crystalmark.info/, The MIT License"
             VALUE "CompanyName", "Crystal Dew World"
-            VALUE "FileVersion", "1.0.0.2020"
+            VALUE "FileVersion", "1.0.0.0"
             VALUE "ProductName", "Project Priscilla"
             VALUE "FileDescription", "Project Priscilla"
             VALUE "OriginalFilename", "Priscilla.exe"
             VALUE "InternalName", "Priscilla.exe"
-            VALUE "LegalCopyright", "(C) 2020 hiyohiyo"
-            VALUE "ProductVersion", "1.0.0.2020"
+            VALUE "LegalCopyright", "(C) 2020-2021 hiyohiyo"
+            VALUE "ProductVersion", "1.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -225,15 +225,16 @@ BEGIN
             MENUITEM "300%",                        ID_ZOOM_300
             MENUITEM "Auto",                        ID_ZOOM_AUTO
         END
-        MENUITEM "Font Setting",                ID_FONT_SETTING
+        MENUITEM "Font Setting",                    ID_FONT_SETTING
+        MENUITEM "Disable Dark Mode"                ID_DISABLE_DARK_MODE
         MENUITEM SEPARATOR
     END
     POPUP "&Help"
     BEGIN
         MENUITEM "Help",                        ID_HELP
-        MENUITEM "About Project Priscilla",     ID_HELP_ABOUT
-        MENUITEM SEPARATOR
         MENUITEM "Crystal Dew World [Web]",     ID_HELP_CRYSTALDEWWORLD
+        MENUITEM SEPARATOR
+        MENUITEM "About Project Priscilla",     ID_HELP_ABOUT
     END
     POPUP "&Language"
     BEGIN

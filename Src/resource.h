@@ -54,13 +54,14 @@
 #define ID_ZOOM_200                     32803
 #define ID_ZOOM_250                     32804
 #define ID_ZOOM_300                     32805
+#define ID_ZOOM_AUTO                    33806
 #define ID_FONT_SETTING                 32807
 #define ID_HELP_ABOUT                   32810
 #define ID_HELP_HELP                    32811
 #define ID_HELP_CRYSTALDEWWORLD         32812
 #define ID_LANGUAGE_A                   32813
 #define ID_LANGUAGE_O                   32814
-#define ID_ZOOM_AUTO                    33806
+#define ID_DISABLE_DARK_MODE            32815
 
 // Next default values for new objects
 // 
