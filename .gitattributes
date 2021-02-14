@@ -11,7 +11,7 @@
 # Note: This is only used by command line
 ###############################################################################
 #*.cs     diff=csharp
-*.lang working-tree-encoding=UTF-16 eol=CRLF
+*.lang working-tree-encoding=UTF-16LE-BOM eol=CRLF
 
 ###############################################################################
 # Set the merge driver for project and solution files
