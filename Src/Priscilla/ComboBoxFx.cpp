@@ -66,8 +66,6 @@ IMPLEMENT_DYNAMIC(CComboBoxFx, CComboBox)
 
 BEGIN_MESSAGE_MAP(CComboBoxFx, CComboBox)
 	//{{AFX_MSG_MAP(CComboBoxCx)
-	ON_WM_PAINT()
-	ON_WM_NCPAINT()
 	ON_WM_CTLCOLOR()
 	ON_WM_MOUSEMOVE()
 	ON_WM_MOUSEHOVER()
@@ -195,7 +193,7 @@ void CComboBoxFx::SetItemHeightEx(int nIndex, int height, double zoomRatio, doub
 {
 	if (nIndex == -1)
 	{
-		CRect rc;
+		CRect rc = { 0 };
 		GetWindowRect(&rc);
 		CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
 	}
@@ -209,7 +207,7 @@ void CComboBoxFx::SetItemHeightAll(int height, double zoomRatio, double fontRati
 {
 	m_FontHeight = (LONG)(-1 * height * zoomRatio * fontRatio);
 
-	CRect rc;
+	CRect rc = { 0 };
 	GetWindowRect(&rc);
 	CComboBox::SetItemHeight(-1, (UINT)(height * zoomRatio - rc.Height() + GetItemHeight(-1)));
 
@@ -266,65 +264,6 @@ HBRUSH CComboBoxFx::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	default:
 		return hbr;
 	}
-}
-
-void CComboBoxFx::OnPaint()
-{
-//	CComboBox::OnPaint();
-
-	CBrush brush;
-	CDC* dc;
-	PAINTSTRUCT ps;
-	CRect rect;
-	rect.SetRect(0, 0, m_CtrlSize.cx, 60);
-
-	brush.CreateSolidBrush(RGB(0x19, 0x2F, 0x60));
-
-	dc = BeginPaint(&ps);
-	dc->SetBkMode(TRANSPARENT);
-	dc->SetTextColor(RGB(255, 255, 255));
-//	FrameRect(hDC, &rect, brush);
-//	::BitBlt(0, 0, 90, 60, , 0, 0, SRCCOPY);
-
-	/*
-	CBitmap* pOldBitmap;
-	CDC* pMemDC = new CDC;
-	pMemDC->CreateCompatibleDC(dc);
-	pOldBitmap = pMemDC->SelectObject(&m_CtrlBitmap);
-	pMemDC->BitBlt(0, 0, m_CtrlSize.cx, 60, m_BkDC, 90, 60, SRCCOPY);
-	pMemDC->SelectObject(pOldBitmap);
-	pMemDC->DeleteDC();
-	delete pMemDC;
-	*/
-	// dc->BitBlt(0, 0, m_CtrlSize.cx, 60, m_BkDC, 90, 60, SRCCOPY);
-
-	dc->FillRect(&rect, &brush);
-	dc->DrawText(L"▼ ", &rect, DT_VCENTER | DT_RIGHT | DT_SINGLELINE);
-
-	EndPaint(&ps);
-
-	brush.DeleteObject();
-/**/
-}
-
-void CComboBoxFx::OnNcPaint()
-{
-/*
-	CBrush brush;
-	HDC hDC;0.
-	PAINTSTRUCT ps;
-	CRect rect;
-	rect.SetRect(0, 0, m_CtrlSize.cx, m_CtrlSize.cy);
-
-	brush.CreateSolidBrush(RGB(255, 0, 0));
-
-	hDC = ::BeginPaint(m_hWnd, &ps);
-	FrameRect(hDC, &rect, brush);
-	::EndPaint(m_hWnd, &ps);
-
-	brush.DeleteObject();
-*/
-	CComboBox::OnNcPaint();
 }
 
 //------------------------------------------------

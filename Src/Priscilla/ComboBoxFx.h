@@ -70,8 +70,6 @@ protected:
 
 	// Message Map
 	DECLARE_MESSAGE_MAP()
-	afx_msg void OnPaint();
-	afx_msg void OnNcPaint();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnMouseHover(UINT nFlags, CPoint point);
