@@ -105,6 +105,8 @@ BOOL CPriscillaDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIconMini, FALSE);
 
+	m_RandomThemeLabel = L"Random";
+
 	TCHAR str[256];
 	GetPrivateProfileString(L"Setting", L"FontFace", GetDefaultFont(), str, 256, m_Ini);
 	m_FontFace = str;
@@ -130,6 +132,7 @@ BOOL CPriscillaDlg::OnInitDialog()
 	InitMenu();
 	ChangeTheme(m_CurrentTheme);
 	ChangeLang(m_CurrentLang);
+	UpdateThemeInfo();
 
 	UpdateData(FALSE);
 
