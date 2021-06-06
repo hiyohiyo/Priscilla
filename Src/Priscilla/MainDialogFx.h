@@ -35,13 +35,14 @@ public:
 protected:
 	void InitMenu();
 	void InitThemeLang();
-	void ChangeTheme(CString ThemeName);
+	void ChangeTheme(CString themeName);
 	void SetWindowTitle(CString message);
 	void UpdateThemeInfo();
 	COLORREF GetControlColor(CString name, BYTE defaultColor, CString theme);
 	BYTE GetControlAlpha(CString name, BYTE defaultAlpha, CString theme);
 	BYTE GetCharacterPosition(CString theme);
 	CString GetParentTheme(int i, CString theme);
+	CString GetRandomTheme();
 	void SaveImageDlg(CImage* image);
 
 	virtual BOOL OnInitDialog();
