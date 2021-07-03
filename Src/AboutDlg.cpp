@@ -63,6 +63,7 @@ BOOL CAboutDlg::OnInitDialog()
 	UpdateDialogSize();
 
 	CenterWindow();
+
 	ShowWindow(SW_SHOW);
 	return TRUE;
 }
