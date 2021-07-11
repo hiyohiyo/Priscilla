@@ -200,27 +200,26 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_Static1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_Static2.SetMargin(0, 4, 0, 0, m_ZoomRatio);
 	m_Static3.SetMargin(0, 4, 0, 0, m_ZoomRatio);
-	m_Static1.InitControl(248, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, SS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
-	m_Static2.InitControl(328, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
-	m_Static3.InitControl(408, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass, m_bHighContrast, FALSE);
+	m_Static1.InitControl(248, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, SS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
+	m_Static2.InitControl(328, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE, TRUE);
+	m_Static3.InitControl(408, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, SS_CENTER, OwnerDrawGlass, m_bHighContrast, FALSE, FALSE);
 
 	m_Button3.SetGlassColor(m_Glass, m_GlassAlpha);
-	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE);
-	m_Button2.InitControl(88, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE);
-	m_Button3.InitControl(168, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawGlass, m_bHighContrast, FALSE);
+	m_Button1.InitControl(8, 40, 72, 48, m_ZoomRatio, &m_BkDC, IP(L"Button"), 3, BS_CENTER, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
+	m_Button2.InitControl(88, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawTransparent, m_bHighContrast, FALSE, TRUE);
+	m_Button3.InitControl(168, 40, 72, 48, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, OwnerDrawGlass, m_bHighContrast, FALSE, TRUE);
 
-	m_Button4.InitControl(408, 8, 72, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, FALSE);
+	m_Button4.InitControl(408, 8, 72, 24, m_ZoomRatio, &m_BkDC, NULL, 0, BS_CENTER, SystemDraw, m_bHighContrast, FALSE, FALSE);
 
-	m_Meter1.InitControl(288, 100, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE);
+	m_Meter1.InitControl(288, 100, 192, 48, m_ZoomRatio, &m_BkDC, IP(L"Meter"), 2, SS_RIGHT, OwnerDrawImage, m_bHighContrast, FALSE, FALSE);
 	m_Combo1.InitControl(8, 8, 392, 300, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, m_ComboBk, m_ComboBkSelected, m_Glass, m_GlassAlpha);
 
 	m_Slider1.InitControl(8, 156, 232, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, 50);
 	m_Scrollbar1.InitControl(248, 156, 232, 24, m_ZoomRatio, &m_BkDC, SystemDraw, m_bHighContrast, m_bDarkMode, 0, 100, 50);
 
 	m_Edit1.SetGlassColor(m_Glass, m_GlassAlpha);
-	m_Edit1.SetDrawFrameEx(TRUE, m_Frame);
 	m_Edit1.SetMargin(0, 4, 0, 0, m_ZoomRatio);
-	m_Edit1.InitControl(8, 100, 232, 48, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE);
+	m_Edit1.InitControl(8, 100, 232, 48, m_ZoomRatio, &m_BkDC, NULL, 0, ES_LEFT, OwnerDrawGlass, m_bHighContrast, FALSE, TRUE);
 	m_Edit1.Adjust();
 
 	m_List1.SetTextColor1(m_ListText1);
@@ -237,10 +236,7 @@ void CPriscillaDlg::UpdateDialogSize()
 	m_Button3.SetHandCursor();
 	m_Button4.SetHandCursor();
 
-	m_Button2.SetDrawFrameEx(TRUE, m_Frame);
-	m_Button3.SetDrawFrameEx(TRUE, m_Frame);
-
-	m_Static2.SetDrawFrameEx(TRUE, m_Frame);
+//	m_Static2.SetDrawFrameEx(TRUE, m_Frame);
 	m_Static3.SetDrawFrameEx(TRUE, m_Frame);
 
 	m_Combo1.SetCurSel(0);
@@ -686,7 +682,7 @@ void CPriscillaDlg::SetWindowTitle(CString message)
 		title += L" [ADMIN]";
 	}
 
-	SetWindowText(title);
+	SetWindowText(L" " + title + L" ");
 }
 
 void CPriscillaDlg::OnButton1()

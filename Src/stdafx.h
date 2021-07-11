@@ -67,9 +67,9 @@
 #define PRODUCT_EDITION				L"x86"
 #endif
 
-#define PRODUCT_RELEASE				L"2020/11/24"
-#define PRODUCT_COPY_YEAR			L"2020"
-#define PRODUCT_COPYRIGHT			L"© 2020 hiyohiyo"
+#define PRODUCT_RELEASE				L"2021/07/11"
+#define PRODUCT_COPY_YEAR			L"2020-2021"
+#define PRODUCT_COPYRIGHT			L"© 2020-2021 hiyohiyo"
 #define PRODUCT_LICENSE				L"The MIT License"
 
 #define THEME_DIR					L"Resource\\Theme\\"
