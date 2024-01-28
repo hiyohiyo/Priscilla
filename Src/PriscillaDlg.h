@@ -8,6 +8,7 @@
 #pragma once
 
 #include "AboutDlg.h"
+#include "CSettingsDlg.h"
 #include "FontSelectionDlg.h"
 
 #include "DialogFx.h"
@@ -85,6 +86,7 @@ protected:
 	int m_SizeY;
 
 	CAboutDlg* m_AboutDlg;
+	CSettingsDlg* m_SettingsDlg;
 
 	CButtonFx m_Button1;
 	CButtonFx m_Button2;

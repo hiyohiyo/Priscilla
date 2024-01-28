@@ -13,6 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
+// “ú–{Œê (“ú–{) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
@@ -82,19 +83,19 @@ CAPTION "Priscilla"
 MENU IDR_MENU
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    PUSHBUTTON      "", IDC_HIDE, 0, 0, 0, 0 | WS_TABSTOP
+    PUSHBUTTON      "",IDC_HIDE,0,0,0,0
     COMBOBOX        IDC_COMBO1,144,7,48,30,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_SORT | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Test", IDC_BUTTON4, 7, 25, 53, 43
+    PUSHBUTTON      "Test",IDC_BUTTON4,7,25,53,43
     PUSHBUTTON      "Button1",IDC_BUTTON1,7,25,53,43
-    PUSHBUTTON      "Button2",IDC_BUTTON2, 7, 25, 53, 43
-    PUSHBUTTON      "Button3",IDC_BUTTON3, 7, 25, 53, 43
+    PUSHBUTTON      "Button2",IDC_BUTTON2,7,25,53,43
+    PUSHBUTTON      "Button3",IDC_BUTTON3,7,25,53,43
     LTEXT           "",IDC_STATIC1,68,25,191,43
-    LTEXT           "",IDC_STATIC2, 68, 25, 191, 43
-    LTEXT           "",IDC_STATIC3, 68, 25, 191, 43
+    LTEXT           "",IDC_STATIC2,68,25,191,43
+    LTEXT           "",IDC_STATIC3,68,25,191,43
     LTEXT           "",IDC_METER1,7,7,132,14
-    SCROLLBAR       IDC_SCROLLBAR1, 17, 86, 134, 11
+    SCROLLBAR       IDC_SCROLLBAR1,17,86,134,11
     CONTROL         "",IDC_SLIDER1,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,248,25,100,15
-    CONTROL         "",IDC_EDIT1, "EDIT", ES_MULTILINE | ES_WANTRETURN | WS_TABSTOP, 7, 269, 252, 21,
+    EDITTEXT        IDC_EDIT1,7,269,252,21,ES_MULTILINE | ES_WANTRETURN | NOT WS_BORDER
     CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,124,252,214
 END
 
@@ -116,15 +117,35 @@ STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Font Setting"
 FONT 12, "MS Shell Dlg", 400, 0, 0x80
 BEGIN
-    LTEXT           "Font Face", IDC_FONT_FACE, 1, 1, 1, 1
-    LTEXT           "Font Scale", IDC_FONT_SCALE, 1, 1, 1, 1
-    LTEXT           "Render Method", IDC_FONT_RENDER, 1, 1, 1, 1
-    COMBOBOX        IDC_FONT_FACE_COMBO, 7, 6, 166, 20, CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_FONT_SCALE_COMBO, 7, 28, 166, 148, CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_FONT_RENDER_COMBO, 7, 28, 166, 148, CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Default", IDC_SET_DEFAULT, 26, 17, 156, 107, BS_CENTER
-    PUSHBUTTON      "OK", IDC_OK, 48, 68, 83, 14, BS_CENTER
+    LTEXT           "Font Face",IDC_FONT_FACE,1,1,1,1
+    LTEXT           "Font Scale",IDC_FONT_SCALE,1,1,1,1
+    LTEXT           "Render Method",IDC_FONT_RENDER,1,1,1,1
+    COMBOBOX        IDC_FONT_FACE_COMBO,7,6,166,20,CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FONT_SCALE_COMBO,7,28,166,148,CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_FONT_RENDER_COMBO,7,28,166,148,CBS_DROPDOWNLIST | CBS_OWNERDRAWVARIABLE | CBS_HASSTRINGS | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Default",IDC_SET_DEFAULT,26,17,156,107,BS_CENTER
+    PUSHBUTTON      "OK",IDC_OK,48,68,83,14,BS_CENTER
 END
+
+IDD_SETTINGS DIALOGEX 0, 0, 310, 176
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Settings Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,199,155,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,253,155,50,14
+    LTEXT           "",IDC_CHILD_HOLDER,110,7,193,142
+    CONTROL         "",IDC_TREE1,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,7,62,162
+END
+
+IDD_SETTINGS_OPTION DIALOGEX 0, 0, 166, 176
+STYLE DS_ABSALIGN | DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_VISIBLE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_EDIT1,7,40,119,19,ES_AUTOHSCROLL
+    LTEXT           "Settings",IDC_STATIC,7,17,131,15
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -148,14 +169,14 @@ BEGIN
     BEGIN
         BLOCK "041103a4"
         BEGIN
-            VALUE "Comments", "https://crystalmark.info/, The MIT License"
+            VALUE "Comments", "https://crystalmark.info/, MIT License"
             VALUE "CompanyName", "Crystal Dew World"
             VALUE "FileVersion", "1.0.0.0"
             VALUE "ProductName", "Project Priscilla"
             VALUE "FileDescription", "Project Priscilla"
             VALUE "OriginalFilename", "Priscilla.exe"
             VALUE "InternalName", "Priscilla.exe"
-            VALUE "LegalCopyright", "(C) 2020-2021 hiyohiyo"
+            VALUE "LegalCopyright", "(C) 2020-2024 hiyohiyo"
             VALUE "ProductVersion", "1.0.0.0"
         END
     END
@@ -197,6 +218,22 @@ BEGIN
         TOPMARGIN, 6
         BOTTOMMARGIN, 82
     END
+
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 303
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
+
+    IDD_SETTINGS_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 159
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -225,8 +262,8 @@ BEGIN
             MENUITEM "300%",                        ID_ZOOM_300
             MENUITEM "Auto",                        ID_ZOOM_AUTO
         END
-        MENUITEM "Font Setting",                    ID_FONT_SETTING
-        MENUITEM "Disable Dark Mode"                ID_DISABLE_DARK_MODE
+        MENUITEM "Font Setting",                ID_FONT_SETTING
+        MENUITEM "Disable Dark Mode",           ID_DISABLE_DARK_MODE
         MENUITEM SEPARATOR
     END
     POPUP "&Help"
@@ -284,6 +321,16 @@ END
 //
 
 IDD_MAIN AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_SETTINGS AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_SETTINGS_OPTION AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

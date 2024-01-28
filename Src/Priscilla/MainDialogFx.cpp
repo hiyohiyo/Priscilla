@@ -2,12 +2,13 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 
 #include "../stdafx.h"
 #include "MainDialogFx.h"
 #include <ctime>
+using namespace std;
 
 CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 		:CDialogFx(dlgResouce, pParent)
@@ -166,12 +167,12 @@ void CMainDialogFx::InitThemeLang()
 			defaultTheme = m_RecommendTheme;
 		}
 
-		GetPrivateProfileString(L"Setting", m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
+		GetPrivateProfileStringFx(L"Setting", m_ThemeKeyName, defaultTheme, str, 256, m_Ini);
 		m_CurrentTheme = str;
 	}
 
 // Set Language
-	GetPrivateProfileString(L"Setting", L"Language", L"", str, 256, m_Ini);
+	GetPrivateProfileStringFx(L"Setting", L"Language", L"", str, 256, m_Ini);
 
 	langPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), str);
 	m_DefaultLangPath.Format(L"%s\\%s.lang", (LPTSTR)m_LangDir.GetString(), DEFAULT_LANGUAGE);
@@ -198,7 +199,7 @@ void CMainDialogFx::InitThemeLang()
 					i++;
 					CString cstr;
 					cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
-					GetPrivateProfileString(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
+					GetPrivateProfileStringFx(L"Language", L"LOCALE_ID", L"", str, 256, cstr);
 					if((ptrEnd = _tcsrchr(findData.cFileName, '.')) != NULL){*ptrEnd = '\0';}
 
 					if(_tcsstr(str, currentLocalID) != NULL)
@@ -242,7 +243,6 @@ void CMainDialogFx::InitMenu()
 	UINT newItemID = 0;
 	UINT currentItemID = 0;
 	UINT defaultStyleItemID = 0;
-	UINT defaultLanguageItemID = 0;
 	WIN32_FIND_DATA findData;
 	 
 	HANDLE hFind;
@@ -253,7 +253,7 @@ void CMainDialogFx::InitMenu()
 	TCHAR *ptrEnd = NULL;
 	TCHAR str[256];
 
-	std::srand((unsigned int)std::time(nullptr));
+	srand((unsigned int)std::time(nullptr));
 
 	menu.Attach(GetMenu()->GetSafeHmenu());
 	subMenu.Attach(menu.GetSubMenu(MENU_THEME_INDEX)->GetSafeHmenu());
@@ -335,7 +335,7 @@ void CMainDialogFx::InitMenu()
 				// Add Language
 				CString cstr;
 				cstr.Format(L"%s\\%s", (LPTSTR)m_LangDir.GetString(), findData.cFileName);
-				GetPrivateProfileString(L"Language", L"LANGUAGE", L"", str, 256, cstr);
+				GetPrivateProfileStringFx(L"Language", L"LANGUAGE", L"", str, 256, cstr);
 				if((ptrEnd = _tcsrchr(findData.cFileName, L'.')) != NULL)
 				{
 					*ptrEnd = '\0';
@@ -392,13 +392,13 @@ BOOL CMainDialogFx::OnInitDialog()
 
 void CMainDialogFx::ChangeTheme(CString themeName)
 {
-	WritePrivateProfileString(L"Setting", m_ThemeKeyName, themeName, m_Ini);
+	WritePrivateProfileStringFx(L"Setting", m_ThemeKeyName, themeName, m_Ini);
 }
 
 BOOL CMainDialogFx::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
 	// Select Theme
-	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (UINT)m_MenuArrayTheme.GetSize())
+	if(WM_THEME_ID <= wParam && wParam < WM_THEME_ID + (WPARAM)m_MenuArrayTheme.GetSize())
 	{
 		CMenu menu;
 		CMenu subMenu;
@@ -463,7 +463,7 @@ void CMainDialogFx::SetZoomType(DWORD zoomType)
 {
 	CString cstr;
 	cstr.Format(L"%d", m_ZoomType);
-	WritePrivateProfileString(L"Setting", L"ZoomType", cstr, m_Ini);
+	WritePrivateProfileStringFx(L"Setting", L"ZoomType", cstr, m_Ini);
 }
 
 void CMainDialogFx::UpdateThemeInfo()
@@ -513,14 +513,14 @@ COLORREF CMainDialogFx::GetControlColor(CString name, BYTE defaultColor, CString
 
 BYTE CMainDialogFx::GetControlAlpha(CString name, BYTE defaultAlpha, CString theme)
 {
-	BYTE alpha = GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
+	BYTE alpha = (BYTE)GetPrivateProfileInt(L"Alpha", name, defaultAlpha, theme);
 	
 	return alpha;
 }
 
 BYTE CMainDialogFx::GetCharacterPosition(CString theme)
 {
-	BYTE position = GetPrivateProfileInt(L"Character", L"Position", 0, theme);
+	BYTE position = (BYTE)GetPrivateProfileInt(L"Character", L"Position", 0, theme);
 
 	return position;
 }
@@ -530,7 +530,7 @@ CString CMainDialogFx::GetParentTheme(int i, CString theme)
 	CString cstr;
 	cstr.Format(L"ParentTheme%d", i);
 	TCHAR str[256];
-	GetPrivateProfileString(L"Info", cstr, L"", str, 256, theme);
+	GetPrivateProfileStringFx(L"Info", cstr, L"", str, 256, theme);
 	cstr = str;
 
 	return cstr;
@@ -538,7 +538,7 @@ CString CMainDialogFx::GetParentTheme(int i, CString theme)
 
 CString CMainDialogFx::GetRandomTheme() {
 	// We need to add/subtract one to exclude first item ("Random").
-	UINT i = 1 + std::rand() % ((UINT)m_MenuArrayTheme.GetSize() - 1);
+	UINT i = 1 + rand() % ((UINT)m_MenuArrayTheme.GetSize() - 1);
 	return m_MenuArrayTheme.GetAt(i);
 }
 
@@ -546,12 +546,18 @@ void CMainDialogFx::SaveImage()
 {
 	BOOL bDwmEnabled = FALSE;
 
-	static HMODULE hModule = LoadLibraryEx(L"dwmapi.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	HMODULE hModule = LoadLibraryEx(L"dwmapi.dll", NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
 	typedef HRESULT(WINAPI* FuncDwmGetWindowAttribute) (HWND hwnd, DWORD dwAttribute, PVOID pvAttribute, DWORD cbAttribute);
 	typedef HRESULT(WINAPI* FuncDwmIsCompositionEnabled)(BOOL* pfEnabled);
-	static FuncDwmGetWindowAttribute pDwmGetWindowAttribute = (FuncDwmGetWindowAttribute)GetProcAddress(hModule, "DwmGetWindowAttribute");
-	static FuncDwmIsCompositionEnabled pDwmIsCompositionEnabled = (FuncDwmIsCompositionEnabled)GetProcAddress(hModule, "DwmIsCompositionEnabled");
-	if (hModule && pDwmGetWindowAttribute && pDwmIsCompositionEnabled)
+	FuncDwmGetWindowAttribute pDwmGetWindowAttribute = NULL;
+	FuncDwmIsCompositionEnabled pDwmIsCompositionEnabled = NULL;
+	if (hModule)
+	{
+		pDwmGetWindowAttribute = (FuncDwmGetWindowAttribute)GetProcAddress(hModule, "DwmGetWindowAttribute");
+		pDwmIsCompositionEnabled = (FuncDwmIsCompositionEnabled)GetProcAddress(hModule, "DwmIsCompositionEnabled");
+	}
+
+	if (pDwmGetWindowAttribute && pDwmIsCompositionEnabled)
 	{
 		pDwmIsCompositionEnabled(&bDwmEnabled);
 	}

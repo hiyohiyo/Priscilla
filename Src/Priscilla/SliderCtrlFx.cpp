@@ -2,7 +2,7 @@
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
-//      License : The MIT License
+//      License : MIT License
 /*---------------------------------------------------------------------------*/
 
 #include "../stdafx.h"
@@ -19,6 +19,7 @@ CSliderCtrlFx::CSliderCtrlFx()
 	m_RenderMode = SystemDraw;
 	m_bHighContrast = FALSE;
 	m_bDarkMode = FALSE;
+	m_bBkBitmapInit = FALSE;
 }
 
 CSliderCtrlFx::~CSliderCtrlFx()

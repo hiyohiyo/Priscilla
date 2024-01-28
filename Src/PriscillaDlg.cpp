@@ -12,6 +12,7 @@
 #include "DarkMode.h"
 
 #include "dwmapi.h"
+#pragma comment(lib, "dwmapi.lib") 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -169,6 +170,9 @@ BOOL CPriscillaDlg::OnInitDialog()
 	DWORD style = ListView_GetExtendedListViewStyle(m_List1.m_hWnd);
 	style |= LVS_EX_FULLROWSELECT | /*LVS_EX_GRIDLINES |*/ LVS_EX_LABELTIP;
 	ListView_SetExtendedListViewStyle(m_List1.m_hWnd, style);
+
+	auto cornerPref = DWMWCP_DONOTROUND;
+	auto hr = DwmSetWindowAttribute(m_hWnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPref, sizeof(cornerPref));
 
 	UpdateDialogSize();
 	CenterWindow();
@@ -605,13 +609,13 @@ void CPriscillaDlg::OnDisableDarkMode()
 	{
 		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_UNCHECKED);
 		m_bDisableDarkMode = FALSE;
-		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("0"), m_Ini);
+		WritePrivateProfileString(_T("Setting"), _T("DisableDarkMode"), _T("0"), m_Ini);
 	}
 	else
 	{
 		menu->CheckMenuItem(ID_DISABLE_DARK_MODE, MF_CHECKED);
 		m_bDisableDarkMode = TRUE;
-		WritePrivateProfileStringW(_T("Setting"), _T("DisableDarkMode"), _T("1"), m_Ini);
+		WritePrivateProfileString(_T("Setting"), _T("DisableDarkMode"), _T("1"), m_Ini);
 	}
 	SetMenu(menu);
 	DrawMenuBar();
@@ -714,6 +718,9 @@ void CPriscillaDlg::OnButton3()
 
 void CPriscillaDlg::OnButton4()
 {
+	m_SettingsDlg = new CSettingsDlg(this);
+	m_SettingsDlg->Create(CSettingsDlg::IDD, m_SettingsDlg, NULL, this);
+
 	static BOOL bDarkMode = TRUE;
 	if (bDarkMode)
 	{
