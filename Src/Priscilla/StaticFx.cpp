@@ -49,6 +49,7 @@ CStaticFx::CStaticFx()
 	m_bHandCursor = FALSE;
 
 	// Text Format
+	m_TextFormat = 0;
 	m_LabelFormat = DT_LEFT | DT_TOP | DT_SINGLELINE;
 	m_UnitFormat = DT_RIGHT | DT_BOTTOM | DT_SINGLELINE;
 }
@@ -251,6 +252,11 @@ void CStaticFx::SetLabelUnitFormat(UINT labelFormat, UINT unitFormat)
 {
 	m_LabelFormat = labelFormat;
 	m_UnitFormat = unitFormat;
+}
+
+void CStaticFx::SetTextFormat(UINT format)
+{
+	m_TextFormat = format;
 }
 
 //------------------------------------------------
@@ -510,9 +516,18 @@ void CStaticFx::DrawString(CDC* drawDC, LPDRAWITEMSTRUCT lpDrawItemStruct)
 		extent = drawDC->GetTextExtent(title);
 	}
 
-	if (!m_Label.IsEmpty())
+	if (m_TextFormat != 0)
 	{
-		drawDC->DrawText(title, title.GetLength(), rectControl, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		drawDC->DrawText(title, title.GetLength(), rect, m_TextFormat);
+		drawDC->SelectObject(oldFont);
+
+		oldFont = drawDC->SelectObject(m_FontToolTip);
+		drawDC->DrawText(m_Label, m_Label.GetLength(), rect, m_LabelFormat);
+		drawDC->DrawText(m_Unit, m_Unit.GetLength(), rect, m_UnitFormat);
+	}
+	else if (!m_Label.IsEmpty())
+	{
+		drawDC->DrawText(title, title.GetLength(), rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		drawDC->SelectObject(oldFont);
 
 		oldFont = drawDC->SelectObject(m_FontToolTip);

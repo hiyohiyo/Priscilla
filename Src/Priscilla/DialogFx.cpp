@@ -41,7 +41,7 @@ CDialogFx::CDialogFx(UINT dlgResouce, CWnd* pParent)
 	m_MenuId = 0;
 	m_ParentWnd = NULL;
 	m_DlgWnd = NULL;
-	m_hAccelerator = 0;
+	m_hAccelerator = NULL;
 	m_bDrag = FALSE;
 	m_FontScale = 100;
 	m_FontRatio = 1.0;
@@ -119,7 +119,7 @@ BOOL CDialogFx::OnInitDialog()
 
 	m_hAccelerator = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
 
-	m_bInitializing = FALSE;
+	// m_bInitializing = FALSE;
 
 	return TRUE;
 }

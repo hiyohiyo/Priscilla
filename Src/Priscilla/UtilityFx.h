@@ -43,3 +43,9 @@ BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR l
 ////------------------------------------------------
 
 BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath);
+
+////------------------------------------------------
+//   Play Sound
+////------------------------------------------------
+
+BOOL AlertSound(const CString& alertSoundPath, int volume);

@@ -51,6 +51,7 @@ CMainDialogFx::CMainDialogFx(UINT dlgResouce, CWnd* pParent)
 	if ((ptrEnd = _tcsrchr(tmp, '\\')) != NULL) { *ptrEnd = '\0'; }
 	m_ThemeDir.Format(L"%s\\%s", tmp, THEME_DIR);
 	m_LangDir.Format(L"%s\\%s", tmp, LANGUAGE_DIR);
+	m_VoiceDir.Format(L"%s\\%s", tmp, VOICE_DIR);
 }
 
 CMainDialogFx::~CMainDialogFx()
@@ -59,6 +60,7 @@ CMainDialogFx::~CMainDialogFx()
 
 BEGIN_MESSAGE_MAP(CMainDialogFx, CDialogFx)
 	ON_WM_WINDOWPOSCHANGING()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 int CALLBACK HasFontProc(ENUMLOGFONTEX* lpelfe, NEWTEXTMETRICEX* lpntme, int FontType, LPARAM lParam)
@@ -452,6 +454,88 @@ void CMainDialogFx::OnWindowPosChanging(WINDOWPOS * lpwndpos)
 	}
 
     CDialogFx::OnWindowPosChanging(lpwndpos);
+}
+
+void CMainDialogFx::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	lpMMI->ptMinTrackSize.x = m_MinSizeX;
+	lpMMI->ptMinTrackSize.y = m_MinSizeY;
+
+	lpMMI->ptMaxTrackSize.x = m_MaxSizeX;
+	lpMMI->ptMaxTrackSize.y = m_MaxSizeY;
+
+	CDialogFx::OnGetMinMaxInfo(lpMMI);
+}
+
+void CMainDialogFx::SaveWindowPosition()
+{
+	WINDOWPLACEMENT place = { sizeof(WINDOWPLACEMENT) };
+	GetWindowPlacement(&place);
+
+	CString x, y;
+	x.Format(_T("%d"), place.rcNormalPosition.left);
+	y.Format(_T("%d"), place.rcNormalPosition.top);
+	WritePrivateProfileStringFx(_T("Setting"), _T("X"), x, m_Ini);
+	WritePrivateProfileStringFx(_T("Setting"), _T("Y"), y, m_Ini);
+}
+
+void CMainDialogFx::RestoreWindowPosition()
+{
+	const int x = GetPrivateProfileInt(_T("Setting"), _T("X"), INT_MIN, m_Ini);
+	const int y = GetPrivateProfileInt(_T("Setting"), _T("Y"), INT_MIN, m_Ini);
+
+	RECT rw, rc;
+	GetWindowRect(&rw);
+
+	rc.left = x;
+	rc.top = y;
+	rc.right = x + rw.right - rw.left;
+	rc.bottom = y + rw.bottom - rw.top;
+
+	HMONITOR hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONULL);
+	if (hMonitor == nullptr)
+	{
+		CenterWindow();
+	}
+	else
+	{
+		// Get Taskbar Size
+		APPBARDATA	taskbarInfo = { 0 };
+		taskbarInfo.cbSize = sizeof(APPBARDATA);
+		taskbarInfo.hWnd = m_hWnd;
+		SHAppBarMessage(ABM_GETTASKBARPOS, &taskbarInfo);
+		CRect taskbarRect = taskbarInfo.rc;
+
+		if (taskbarInfo.rc.top <= 0 && taskbarInfo.rc.left <= 0) // Top Side or Left Side
+		{
+			if (taskbarRect.Height() > taskbarRect.Width()) // Left Side
+			{
+				if (x < taskbarRect.Width()) // Overlap
+				{
+					SetWindowPos(nullptr, taskbarRect.Width(), y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}
+				else
+				{
+					SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}
+			}
+			else // Top Side
+			{
+				if (y < taskbarRect.Height()) // Overlap
+				{
+					SetWindowPos(nullptr, x, taskbarRect.Height(), 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}
+				else
+				{
+					SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+				}
+			}
+		}
+		else
+		{
+			SetWindowPos(nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+		}
+	}
 }
 
 DWORD CMainDialogFx::GetZoomType()

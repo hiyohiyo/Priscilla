@@ -40,6 +40,7 @@ public:
 	void SetMeter(BOOL bMeter, double meterRatio);
 	void SetLabelUnit(CString label, CString unit);
 	void SetLabelUnitFormat(UINT labelFormat, UINT unitFormat);
+	void SetTextFormat(UINT format);
 
 	// Font
 	void SetFontEx(CString face, int size, int sizeToolTip, double zoomRatio, double fontRatio = 1.0,
@@ -97,6 +98,7 @@ protected:
 	CString m_Label;
 	CString m_Unit;
 
+	UINT m_TextFormat;
 	UINT m_LabelFormat;
 	UINT m_UnitFormat;
 

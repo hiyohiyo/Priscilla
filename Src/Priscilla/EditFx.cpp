@@ -26,6 +26,7 @@ CEditFx::CEditFx()
 	m_Margin.left = 0;
 	m_Margin.bottom = 0;
 	m_Margin.right = 0;
+	m_bMultiLine = FALSE;
 
 	// Glass
 	m_GlassColor = RGB(255, 255, 255);
@@ -61,13 +62,14 @@ END_MESSAGE_MAP()
 //------------------------------------------------
 
 BOOL CEditFx::InitControl(int x, int y, int width, int height, double zoomRatio, CDC* bkDC, 
-	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame)
+	LPCWSTR imagePath, int imageCount, DWORD textAlign, int renderMode, BOOL bHighContrast, BOOL bDarkMode, BOOL bDrawFrame, BOOL bMultiLine)
 {
 	m_X = (int)(x * zoomRatio);
 	m_Y = (int)(y * zoomRatio);
 	m_CtrlSize.cx = (int)(width * zoomRatio);
 	m_CtrlSize.cy = (int)(height * zoomRatio);
 	MoveWindow(m_X, m_Y, m_CtrlSize.cx, m_CtrlSize.cy);
+	m_bMultiLine = bMultiLine;
 
 	m_BkDC = bkDC;
 	m_ImagePath = imagePath;
@@ -173,7 +175,17 @@ void CEditFx::SetMargin(int top, int left, int bottom, int right, double zoomRat
 	m_Margin.bottom = (int)(bottom * zoomRatio);
 	m_Margin.right = (int)(right * zoomRatio);
 
-	SetMargins(m_Margin.left, m_Margin.right);
+//	SetMargins(m_Margin.left, m_Margin.right);
+
+	CRect rectGet, rectSet;
+	GetRect(rectGet);
+
+	rectSet.top = m_Margin.top;
+	rectSet.bottom = rectGet.bottom - m_Margin.bottom - m_Margin.top;
+	rectSet.left = m_Margin.left;
+	rectSet.right = rectGet.right - m_Margin.right - m_Margin.left;
+
+	SetRect(rectSet);
 }
 
 CSize CEditFx::GetSize(void)
@@ -471,7 +483,7 @@ void CEditFx::OnEnChange()
 
 void CEditFx::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	if (nChar == VK_RETURN)
+	if (nChar == VK_RETURN && m_bMultiLine == FALSE)
 	{
 		return ;
 	}

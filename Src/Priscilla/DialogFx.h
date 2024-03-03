@@ -86,8 +86,10 @@ protected:
 	int m_FontScale{};
 	double m_FontRatio{};
 
+	int m_SizeX{};
 	int m_MaxSizeX{};
 	int m_MinSizeX{};
+	int m_SizeY{};
 	int m_MaxSizeY{};
 	int m_MinSizeY{};
 
@@ -139,6 +141,11 @@ protected:
 	CString m_CurrentLangPath;
 	CString m_DefaultLangPath;
 	CString m_BackgroundName;
+
+	// Voice for SubClass
+	CString m_VoiceDir;
+	CString m_CurrentVoice;
+	INT     m_VoiceVolume{};
 
 	// Class
 	CBitmap m_BkBitmap;

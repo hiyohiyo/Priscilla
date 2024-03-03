@@ -240,6 +240,10 @@ BOOL WritePrivateProfileStringFx(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR l
 
 BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath)
 {
+#ifdef _DEBUG
+	return TRUE;
+#endif
+
 	// check sign
 
 	WINTRUST_FILE_INFO FileData = { sizeof(WINTRUST_FILE_INFO) };
@@ -280,6 +284,80 @@ BOOL CheckCodeSign(LPCTSTR certName, LPCTSTR filePath)
 	WinTrustData.dwStateAction = WTD_STATEACTION_CLOSE;
 	(void)WinVerifyTrust(NULL, &WVTPolicyGUID, &WinTrustData);
 	if (!cert_chk)  return FALSE;
+
+	return TRUE;
+}
+
+////------------------------------------------------
+//   Play Sound
+////------------------------------------------------
+
+#include <mmsystem.h>
+#include "digitalv.h"
+
+#pragma comment(lib, "winmm.lib")
+
+BOOL AlertSound(const CString& alertSoundPath, int volume)
+{
+	static MCI_OPEN_PARMS mop = { 0 };
+	static MCI_PLAY_PARMS mpp = { 0 };
+	static MCI_GENERIC_PARMS mgp = { 0 };
+	MCIERROR error = 0;
+
+	if (mop.wDeviceID != 0)
+	{
+		// Stop and close
+		error = mciSendCommandW(mop.wDeviceID, MCI_STOP, MCI_WAIT, (DWORD_PTR)&mop);
+		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, MCI_WAIT, (DWORD_PTR)&mop);
+		mop.wDeviceID = 0;
+		ZeroMemory(&mop, sizeof(MCI_OPEN_PARMS));
+		if (error)
+		{
+			return FALSE;
+		}
+	}
+
+	if (alertSoundPath.Compare(_T("")) == 0) {
+		// mode == AS_DEINIT
+		// Close
+		error = mciSendCommandW(mop.wDeviceID, MCI_CLOSE, 0, reinterpret_cast<DWORD_PTR>(&mop));
+		if (error)
+		{
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	// Open
+	mop.lpstrDeviceType = _T("MPEGVideo");
+	mop.lpstrElementName = alertSoundPath.GetString();
+	error = mciSendCommandW(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD_PTR)(&mop));
+	if (error)
+	{
+		return FALSE;
+	}
+
+	// Set volume
+	if (volume < 0 || volume > 100) volume = 80;
+
+	MCI_DGV_SETAUDIO_PARMS parms = { 0 };
+	parms.dwItem = MCI_DGV_SETAUDIO_VOLUME;
+	parms.dwValue = volume * 10; // 0-1000
+	error = mciSendCommand(mop.wDeviceID, MCI_SETAUDIO, MCI_DGV_SETAUDIO_ITEM | MCI_DGV_SETAUDIO_VALUE, (DWORD_PTR)&parms);
+
+	// Seek
+	error = mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, reinterpret_cast<DWORD_PTR>(&mgp));
+	if (error)
+	{
+		return FALSE;
+	}
+
+	// Play
+	error = mciSendCommandW(mop.wDeviceID, MCI_PLAY, 0, reinterpret_cast<DWORD_PTR>(&mpp));
+	if (error)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }

@@ -19,6 +19,7 @@ CComboBoxFx::CComboBoxFx()
 	m_Y = 0;
 	m_ZoomRatio = 1.0;
 	m_bHighContrast = FALSE;
+	m_bDarkMode = FALSE;
 	m_RenderMode = SystemDraw;
 	m_Margin.top = 0;
 	m_Margin.left = 0;
