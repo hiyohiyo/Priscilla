@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------*/
+ï»¿/*---------------------------------------------------------------------------*/
 //       Author : hiyohiyo
 //         Mail : hiyohiyo@crystalmark.info
 //          Web : https://crystalmark.info/
@@ -478,51 +478,51 @@ BOOL AlertSound(const CString& alertSoundPath, int volume)
 #include <windows.h>
 #include <wincrypt.h>
 
-// UTF-8•¶š—ñ‚ğˆø”‚É‚Æ‚èAMD5ƒnƒbƒVƒ…‚ğ128ƒrƒbƒg‚ÌƒnƒbƒVƒ…’l‚Æ‚µ‚Ä•Ô‹p‚·‚éŠÖ”
+// UTF-8æ–‡å­—åˆ—ã‚’å¼•æ•°ã«ã¨ã‚Šã€MD5ãƒãƒƒã‚·ãƒ¥ã‚’128ãƒ“ãƒƒãƒˆã®ãƒãƒƒã‚·ãƒ¥å€¤ã¨ã—ã¦è¿”å´ã™ã‚‹é–¢æ•°
 CStringA MD5(const CStringA& str)
 {
 	HCRYPTPROV hProv = 0;
 	HCRYPTHASH hHash = 0;
-	BYTE hash[16]; // MD5‚ÌƒnƒbƒVƒ…’l‚Í16ƒoƒCƒg
+	BYTE hash[16]; // MD5ã®ãƒãƒƒã‚·ãƒ¥å€¤ã¯16ãƒã‚¤ãƒˆ
 	DWORD hashLen = 16;
 	CStringA hashStr;
 
-	// Cryptographic Service Provider (CSP)‚ğæ“¾
+	// Cryptographic Service Provider (CSP)ã‚’å–å¾—
 	if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) {
 		return "";
 	}
 
-	// MD5ƒnƒbƒVƒ…ƒIƒuƒWƒFƒNƒg‚ğì¬
+	// MD5ãƒãƒƒã‚·ãƒ¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 	if (!CryptCreateHash(hProv, CALG_MD5, 0, 0, &hHash)) {
 		CryptReleaseContext(hProv, 0);
 		return "";
 	}
 
-	// CString‚ğUTF-8‚É•ÏŠ·‚µ‚ÄƒoƒCƒg”z—ñ‚ğæ“¾
+	// CStringã‚’UTF-8ã«å¤‰æ›ã—ã¦ãƒã‚¤ãƒˆé…åˆ—ã‚’å–å¾—
 	std::string utf8Str(str);
 
-	// ƒf[ƒ^‚ğƒnƒbƒVƒ…ƒIƒuƒWƒFƒNƒg‚É’Ç‰Á
+	// ãƒ‡ãƒ¼ã‚¿ã‚’ãƒãƒƒã‚·ãƒ¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«è¿½åŠ 
 	if (!CryptHashData(hHash, reinterpret_cast<const BYTE*>(utf8Str.c_str()), (DWORD)utf8Str.size(), 0)) {
 		CryptDestroyHash(hHash);
 		CryptReleaseContext(hProv, 0);
 		return "";
 	}
 
-	// ƒnƒbƒVƒ…’l‚ğæ“¾
+	// ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—
 	if (!CryptGetHashParam(hHash, HP_HASHVAL, hash, &hashLen, 0)) {
 		CryptDestroyHash(hHash);
 		CryptReleaseContext(hProv, 0);
 		return "";
 	}
 
-	// ƒnƒbƒVƒ…’l‚ğ16i”•¶š—ñ‚É•ÏŠ·
+	// ãƒãƒƒã‚·ãƒ¥å€¤ã‚’16é€²æ•°æ–‡å­—åˆ—ã«å¤‰æ›
 	for (DWORD i = 0; i < hashLen; ++i) {
 		CString temp;
 		temp.Format(_T("%02x"), hash[i]);
 		hashStr += temp;
 	}
 
-	// ƒŠƒ\[ƒX‚Ì‰ğ•ú
+	// ãƒªã‚½ãƒ¼ã‚¹ã®è§£æ”¾
 	CryptDestroyHash(hHash);
 	CryptReleaseContext(hProv, 0);
 
