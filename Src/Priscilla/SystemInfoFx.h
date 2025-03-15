@@ -19,3 +19,7 @@ void GetBaseBoardInfo(CString& baseBoardInfo);
 void GetComputerSystemInfo(CString& computerSystemInfo);
 void GetScreenInfo(CString& screenInfo, int* width, int* height, int* color, CString& smoothing);
 void GetMemoryInfo(CString& screenInfo, int* size = NULL);
+
+#if _MSC_VER <= 1310
+BOOL IsFPU();
+#endif
