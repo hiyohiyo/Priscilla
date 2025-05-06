@@ -47,6 +47,8 @@ DWORD CountSetBits(ULONG_PTR bitMask) {
 }
 
 typedef ULONGLONG(WINAPI* FuncGetLogicalProcessorInformationEx)(LOGICAL_PROCESSOR_RELATIONSHIP, PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX, PDWORD);
+typedef BOOL(WINAPI* FuncGetLogicalProcessorInformation)(PSYSTEM_LOGICAL_PROCESSOR_INFORMATION, PDWORD);
+
 #endif
 
 void GetProcessorInfo(int* cores, int* threads)
@@ -57,10 +59,13 @@ void GetProcessorInfo(int* cores, int* threads)
 #if _MSC_VER > 1310
 	HMODULE hModule = GetModuleHandle(_T("kernel32.dll"));
 	FuncGetLogicalProcessorInformationEx pGetLogicalProcessorInformationEx = NULL;
+	FuncGetLogicalProcessorInformation pGetLogicalProcessorInformation = NULL;
 
 	if (hModule)
 	{
 		pGetLogicalProcessorInformationEx = (FuncGetLogicalProcessorInformationEx)GetProcAddress(hModule, "GetLogicalProcessorInformationEx");
+		pGetLogicalProcessorInformation = (FuncGetLogicalProcessorInformation)GetProcAddress(hModule, "GetLogicalProcessorInformation");
+
 	}
 
 	// for Windows 7 or later
@@ -87,14 +92,14 @@ void GetProcessorInfo(int* cores, int* threads)
 		}
 		delete[] buffer;
 	}
-	// for Windows XP/Vista
-	else
+	// for Windows XP SP3/Vista
+	else if(pGetLogicalProcessorInformation != NULL)
 	{
 		DWORD length = 0;
-		GetLogicalProcessorInformation(NULL, &length);
+		pGetLogicalProcessorInformation(NULL, &length);
 
 		SYSTEM_LOGICAL_PROCESSOR_INFORMATION* buffer = new SYSTEM_LOGICAL_PROCESSOR_INFORMATION[length / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION)];
-		GetLogicalProcessorInformation(&buffer[0], &length);
+		pGetLogicalProcessorInformation(&buffer[0], &length);
 
 		for (DWORD i = 0; i != length / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION); ++i) {
 			if (buffer[i].Relationship == RelationProcessorCore) {
@@ -110,6 +115,14 @@ void GetProcessorInfo(int* cores, int* threads)
 		}
 		delete[] buffer;
 	}
+	else // - Windows XP SP2
+	{
+		SYSTEM_INFO si = { 0 };
+		GetSystemInfo(&si);
+
+		*cores = si.dwNumberOfProcessors;
+		*threads = si.dwNumberOfProcessors;
+	}
 #else
 	SYSTEM_INFO si = {0};
 	GetSystemInfo(&si);
@@ -121,7 +134,6 @@ void GetProcessorInfo(int* cores, int* threads)
 
 #if defined(_M_IX86) || defined(_M_X64)
 
-void getCpuid(unsigned int param, unsigned int* _eax, unsigned int* _ebx, unsigned int* _ecx, unsigned int* _edx);
 void getProcessorBrandString(char* brandString);
 void getCpuName(char* cpuName);
 unsigned int getCacheInfoIntel(int test);
@@ -130,7 +142,7 @@ CStringA getCpuModelName(CStringA vendor, unsigned int family, unsigned int mode
 #if _MSC_VER > 1310
 #include <intrin.h> // for __cpuid
 
-void getCpuid(unsigned int param, unsigned int* _eax, unsigned int* _ebx, unsigned int* _ecx, unsigned int* _edx)
+void GetCpuid(unsigned int param, unsigned int* _eax, unsigned int* _ebx, unsigned int* _ecx, unsigned int* _edx)
 {
 	int cpuInfo[4] = { 0 };
 	__cpuid(cpuInfo, param);
@@ -165,7 +177,7 @@ BOOL IsCpuidSupported()
 	return supported;
 }
 
-void getCpuid(unsigned int param, unsigned int* _eax, unsigned int* _ebx, unsigned int* _ecx, unsigned int* _edx)
+void GetCpuid(unsigned int param, unsigned int* _eax, unsigned int* _ebx, unsigned int* _ecx, unsigned int* _edx)
 {
 	static BOOL bIsCpuid = IsCpuidSupported();
 	if (!bIsCpuid) { return; }
@@ -196,7 +208,7 @@ void getProcessorBrandString(char* brandString)
 	__try
 	{
 		// Check if CPUID supports brand string
-		getCpuid(0x80000000, &eax, &ebx, &ecx, &edx);
+		GetCpuid(0x80000000, &eax, &ebx, &ecx, &edx);
 		if (eax < 0x80000004) {
 			strcpy(brandString, "");
 			return;
@@ -204,7 +216,7 @@ void getProcessorBrandString(char* brandString)
 
 		// Get brand string
 		for (int i = 0x80000002; i <= 0x80000004; ++i) {
-			getCpuid(i, &eax, &ebx, &ecx, &edx);
+			GetCpuid(i, &eax, &ebx, &ecx, &edx);
 			memcpy(brandString + (i - 0x80000002) * 16, &eax, 4);
 			memcpy(brandString + (i - 0x80000002) * 16 + 4, &ebx, 4);
 			memcpy(brandString + (i - 0x80000002) * 16 + 8, &ecx, 4);
@@ -214,6 +226,26 @@ void getProcessorBrandString(char* brandString)
 	__except (EXCEPTION_EXECUTE_HANDLER)
 	{
 		strcpy(brandString, "");
+	}
+}
+
+void GetHypervisorVendorString(char* vendorString)
+{
+	unsigned int eax = 0;
+	unsigned int ebx = 0;
+	unsigned int ecx = 0;
+	unsigned int edx = 0;
+
+	__try
+	{
+		GetCpuid(0x40000000, &eax, &ebx, &ecx, &edx);
+		memcpy(vendorString, &ebx, 4);
+		memcpy(vendorString + 4, &ecx, 4);
+		memcpy(vendorString + 8, &edx, 4);
+	}
+	__except (EXCEPTION_EXECUTE_HANDLER)
+	{
+		strcpy(vendorString, "");
 	}
 }
 
@@ -243,6 +275,48 @@ inline void outpb(unsigned short port, unsigned char data)
 		mov al, data
 		out dx, al
 	}
+}
+
+// https://github.com/captainys/TOWNSEMU/issues/147#issuecomment-2764633838
+BOOL IsFMTOWNS()
+{
+	static BOOL b = -1;
+	if (b == -1)
+	{
+		b = FALSE;
+
+		if (IsPC98())
+		{
+			return FALSE;
+		}
+
+		if (! IsWin95First())
+		{
+			return FALSE;
+		}
+
+		if (GetUserDefaultLCID() != 0x0411) // Japanese
+		{
+			return FALSE;
+		}
+
+		__try
+		{
+			BYTE in30 = (BYTE)inpb(0x30);
+			BYTE in31 = (BYTE)inpb(0x31);
+			if (in30 && in30 != 0xFF && in31 && in31 != 0xFF)
+			{
+				b = TRUE;
+				return TRUE;
+			}
+		}
+		__except (EXCEPTION_EXECUTE_HANDLER)
+		{
+			return FALSE;
+		}
+	}
+
+	return b;
 }
 
 BOOL Is486orAbove()
@@ -370,10 +444,14 @@ void getCpuName(char* cpuName)
 		{
 			modelName = "386 Generation Processor";
 		}
+		else if (IsFMTOWNS())
+		{
+			
+		}
 		else if (IsCyrixCPU())
 		{
 			modelName = "Cyrix Unknown CPU";
-			if (IsWin9x() && !IsPC98()) // PC-98 is not supported. 
+			if (IsWin9x() && !IsPC98() && !IsFMTOWNS()) // PC-98 and FM TOWNS are not supported. 
 			{
 				modelName = getCyrixModelName();
 			}
@@ -415,12 +493,12 @@ void getCpuName(char* cpuName)
 #endif
 
 	char vendorString[13] = {0};
-	getCpuid(0x00, &eax, &ebx, &ecx, &edx);
+	GetCpuid(0x00, &eax, &ebx, &ecx, &edx);
 	memcpy(vendorString, &ebx, 4);
 	memcpy(vendorString + 4, &edx, 4);
 	memcpy(vendorString + 8, &ecx, 4);
 
-	getCpuid(0x80000000, &eax, &ebx, &ecx, &edx);
+	GetCpuid(0x80000000, &eax, &ebx, &ecx, &edx);
 	maxCpuId = eax;
 
 	if (maxCpuId >= 0x80000004)
@@ -430,7 +508,7 @@ void getCpuName(char* cpuName)
 	else 
 	{
 		CStringA vendor = vendorString;
-		getCpuid(0x1, &eax, &ebx, &ecx, &edx);
+		GetCpuid(0x1, &eax, &ebx, &ecx, &edx);
 
 		unsigned int version = eax;
 		unsigned int family = (version >> 8) & 0xF;
@@ -438,13 +516,13 @@ void getCpuName(char* cpuName)
 		unsigned int stepping = version & 0xF;
 		unsigned int type = (version >> 12) & 0x3;
 
-		unsigned int fpu = edx & 0x1;
+		unsigned int fpu = 1; // Under Construction
 
 		unsigned int cacheL2 = 0;
 		unsigned int temp = 0;
 		if (vendor.Find("GenuineIntel") == 0)
 		{
-			getCpuid(0x2, &eax, &ebx, &ecx, &edx);
+			GetCpuid(0x2, &eax, &ebx, &ecx, &edx);
 			temp = getCacheInfoIntel((eax & 0xFF000000) >> 24); if (temp > 0) { cacheL2 = temp; }
 			temp = getCacheInfoIntel((eax & 0x00FF0000) >> 16); if (temp > 0) { cacheL2 = temp; }
 			temp = getCacheInfoIntel((eax & 0x0000FF00) >> 8);  if (temp > 0) { cacheL2 = temp; }
@@ -465,7 +543,7 @@ void getCpuName(char* cpuName)
 
 		if(maxCpuId >= 0x80000006)
 		{
-			getCpuid(0x80000006, &eax, &ebx, &ecx, &edx);
+			GetCpuid(0x80000006, &eax, &ebx, &ecx, &edx);
 			cacheL2 = ((ebx >> 12) & 0xF) * 256;
 		}
 
@@ -1195,6 +1273,10 @@ void GetGpuInfo(CString& gpuInfo)
 				{
 					gpuInfo = cstr;
 				}
+				else if (gpuInfo.Find(cstr) >= 0)
+				{
+					// Duplication
+				}
 				else
 				{
 					gpuInfo += _T(" | ") + cstr;
@@ -1654,6 +1736,10 @@ void GetComputerSystemInfo(CString& computerSystemInfo)
 	{
 		computerSystemInfo = _T("[PC-98] ") + computerSystemInfo;
 	}
+	else if (IsFMTOWNS())
+	{
+		computerSystemInfo = _T("[FM TOWNS] ") + computerSystemInfo;
+	}
 #endif
 }
 
@@ -1753,24 +1839,44 @@ void GetMemoryInfo(CString& memoryInfo, int* size)
 }
 
 #if _MSC_VER <= 1310
-BOOL IsFPU()
+/// https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/124207
+BOOL IsCoProcessorPresent()
 {
-	unsigned int eax = 0;
-	unsigned int ebx = 0;
-	unsigned int ecx = 0;
-	unsigned int edx = 0;
+#define MY_ERROR_WRONG_OS 0x20000000
+	HKEY hKey;
+	SYSTEM_INFO SystemInfo;
 
-	__try 
-	{
-		getCpuid(0x1, &eax, &ebx, &ecx, &edx);
+	// return FALSE if we are not running under Windows NT
+	// this should be expanded to cover alternative Win32 platforms
 
-		return edx & 0x1; // FPU
-	}
-	__except (EXCEPTION_EXECUTE_HANDLER)
+	if (!(GetVersion() & 0x7FFFFFFF))
 	{
-		return FALSE;
+		SetLastError(MY_ERROR_WRONG_OS);
+		return(FALSE);
 	}
-	return FALSE;
+
+	// we return TRUE if we're not running on x86
+	// other CPUs have built in floating-point, with no registry entry
+
+	GetSystemInfo(&SystemInfo);
+
+	if ((SystemInfo.dwProcessorType != PROCESSOR_INTEL_386) &&
+		(SystemInfo.dwProcessorType != PROCESSOR_INTEL_486) &&
+		(SystemInfo.dwProcessorType != PROCESSOR_INTEL_PENTIUM))
+	{
+		return(TRUE);
+	}
+
+	if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("HARDWARE\\DESCRIPTION\\System\\FloatingPointProcessor"),
+		0, KEY_EXECUTE,	&hKey) != ERROR_SUCCESS)
+	{
+		// GetLastError() will indicate ERROR_RESOURCE_DATA_NOT_FOUND
+		// if we can't find the key.  This indicates no coprocessor present
+		return(FALSE);
+	}
+
+	RegCloseKey(hKey);
+	return(TRUE);
 }
 #endif
 
